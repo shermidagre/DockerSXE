@@ -1,0 +1,64 @@
+services:
+  db:
+    image: mysql
+    container_name: prestashop_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+    volumes:
+      - db_data:/var/lib/mysql
+
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  prestashop:
+    image: prestashop/prestashop:latest
+    container_name: prestashop_app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_SERVER: db
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWD: ${MYSQL_PASSWORD}
+      PS_INSTALL_AUTO: 1
+      PS_DEV_MODE: 1
+      PS_DOMAIN:  localhost:8080
+      PS_LANGUAGE: es
+      PS_COUNTRY: ES
+
+    ports:
+      - "8080:80"
+
+    volumes:
+        - prestashop_data:/var/www/html
+
+    restart: always
+
+  phpmyadmin:
+      image: phpmyadmin:latest
+      container_name: prestashop_phpmyadmin
+      depends_on:
+        db:
+          condition: service_healthy
+      ports:
+        - "8081:80"
+      environment:
+        PMA_HOST: db
+        PMA_USER: root
+        PMA_PASSWORD: rootpass
+
+      restart: always
+
+volumes:
+  db_data:
+  prestashop_data:

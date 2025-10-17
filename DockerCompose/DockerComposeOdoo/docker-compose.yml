@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres
+    container_name: odoo_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: postgres
+      MYSQL_DATABASE: odoo
+      MYSQL_USER: odoo
+      MYSQL_PASSWORD: odoo
+
+      port: '5432'
+
+    volumes:
+      - db_data:/var/lib/mysql
+
+    odoo:
+      image: odoo:18
+      container_name: odoo
+      restart: always
+      environment:
+        POSTGRES_USER: odoo
+
+
+
+volumes:
+  db_data:
+  prestashop_data:
