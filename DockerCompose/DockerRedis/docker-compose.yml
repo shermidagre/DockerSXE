@@ -1,0 +1,146 @@
+services:
+
+  db:
+
+    image: mariadb
+
+    container_name: mariadb
+
+    restart: always
+
+    environment:
+
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+      MYSQL_USER: ${MYSQL_USER}
+
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+
+    volumes:
+      - /home/dolibarr_mariadb:/var/lib/mysql
+
+  prestashop:
+
+    image: prestashop/prestashop
+
+    container_name: prestashop
+
+    depends_on:
+
+     - db
+     - redis
+
+
+
+    environment:
+
+      DB_SERVER: db
+
+      DB_NAME: ${MYSQL_DATABASE}
+
+      DB_USER: ${DOLI_DB_USER}
+
+      DB_PASSWD: ${DOLI_DB_PASSWORD}
+
+      PS_INSTALL_AUTO: 1
+
+      PS_DEV_MODE: 1
+
+      PS_DOMAIN: localhost:8080
+
+
+      PS_CACHE_ENABLED: 1
+
+      PS_CACHE_DRIVER: redis
+
+      PS_REDIS_SERVER: redis
+
+      PS_REDIS_PORT: 6379
+
+
+    ports:
+        - "8080:80"
+
+
+    volumes:
+      - prestashop_data:/var/www/html
+
+
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    depends_on:
+     -  db
+
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    restart: always
+
+  redis :
+
+    image: redis
+    container_name: "redis"
+
+    restart: always
+
+    ports:
+
+      - "6379:6379"
+
+    volumes:
+
+        - ./redis_config/redis.conf:/redis-config/redis.conf
+
+        - redis_data:/data
+
+    command: redis-server /redis-config/redis.conf
+
+  dolibarr:
+      image: dolibarr/dolibarr:latest
+      container_name: dolibarr
+      ports:
+        - "80:80"
+
+      environment:
+        DOLI_INIT_DEMO: ${DOLI_INIT_DEMO}
+        DOLI_DB_HOST: ${DOLI_DB_HOST}
+        DOLI_DB_NAME: ${DOLI_DB_NAME}
+        DOLI_DB_USER: ${DOLI_DB_USER}
+        DOLI_DB_PASSWORD: ${DOLI_DB_PASSWORD}
+        DOLI_URL_ROOT: "${DOLI_URL_ROOT}"
+        DOLI_ADMIN_LOGIN: "${DOLI_ADMIN_LOGIN}"
+        DOLI_ADMIN_PASSWORD: "${DOLI_ADMIN_PASSWORD}"
+        DOLI_CRON: ${DOLI_CRON}
+        DOLI_CRON_KEY: ${DOLI_CRON_KEY}
+        DOLI_COMPANY_NAME: ${DOLI_COMPANY_NAME}
+        WWW_USER_ID: ${WWW_USER_ID}
+        WWW_GROUP_ID: ${WWW_GROUP_ID}
+
+      links:
+        - db
+      volumes:
+        - /home/dolibarr_documents:/var/www/documents
+        - /home/dolibarr_custom:/var/www/html/custom
+
+volumes:
+
+  db_data:
+
+  prestashop_data:
+
+  redis_data:
+
+  redis_config:
+
+  dolibarr_documents:
+
+  dolibarr_custom:
