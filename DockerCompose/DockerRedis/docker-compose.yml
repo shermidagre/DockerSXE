@@ -22,6 +22,8 @@ services:
     volumes:
       - /home/dolibarr_mariadb:/var/lib/mysql
 
+
+
   prestashop:
 
     image: prestashop/prestashop
@@ -41,9 +43,9 @@ services:
 
       DB_NAME: ${MYSQL_DATABASE}
 
-      DB_USER: ${DOLI_DB_USER}
+      DB_USER: root
 
-      DB_PASSWD: ${DOLI_DB_PASSWORD}
+      DB_PASSWD: ${MYSQL_ROOT_PASSWORD}
 
       PS_INSTALL_AUTO: 1
 

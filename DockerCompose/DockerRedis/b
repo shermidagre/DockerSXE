@@ -1,0 +1,100 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. Todos los derechos reservados.
+
+Instale la versión más reciente de PowerShell para obtener nuevas características y mejoras. https://aka.ms/PSWindows
+
+PS C:\Users\samue\Documents\dam2\DockerSXE\DockerCompose\DockerRedis> docker exec -it prestashop bash
+root@94e373304ae7:/var/www/html# rm -f /var/www/html/install.lock
+root@94e373304ae7:/var/www/html# apt update && apt install mariadb-client -y
+mysql -h db -u root -p
+Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8791 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [282 kB]
+Fetched 9335 kB in 10s (906 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+40 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  libmariadb3 mariadb-client-core mariadb-common
+The following packages will be upgraded:
+  libmariadb3 mariadb-client mariadb-client-core mariadb-common
+4 upgraded, 0 newly installed, 0 to remove and 36 not upgraded.
+Need to get 4132 kB of archives.
+After this operation, 20.5 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian bookworm/main amd64 mariadb-common all 1:10.11.14-0+deb12u2 [26.3 kB]
+Get:2 http://deb.debian.org/debian bookworm/main amd64 libmariadb3 amd64 1:10.11.14-0+deb12u2 [182 kB]
+Get:3 http://deb.debian.org/debian bookworm/main amd64 mariadb-client-core amd64 1:10.11.14-0+deb12u2 [894 kB]
+Get:4 http://deb.debian.org/debian bookworm/main amd64 mariadb-client amd64 1:10.11.14-0+deb12u2 [3030 kB]
+Fetched 4132 kB in 2s (1773 kB/s)
+debconf: delaying package configuration, since apt-utils is not installed
+(Reading database ... 15421 files and directories currently installed.)
+Preparing to unpack .../mariadb-common_1%3a10.11.14-0+deb12u2_all.deb ...
+
+Progress: [  0%] [..............................................................]
+Unpacking mariadb-common (1:10.11.14-0+deb12u2) over (1:10.11.11-0+deb12u1) ....]
+
+Preparing to unpack .../libmariadb3_1%3a10.11.14-0+deb12u2_amd64.deb ...........]
+
+Unpacking libmariadb3:amd64 (1:10.11.14-0+deb12u2) over (1:10.11.11-0+deb12u1) ...
+
+Preparing to unpack .../mariadb-client-core_1%3a10.11.14-0+deb12u2_amd64.deb ...]
+
+Unpacking mariadb-client-core (1:10.11.14-0+deb12u2) over (1:10.11.11-0+deb12u1) ...
+
+Preparing to unpack .../mariadb-client_1%3a10.11.14-0+deb12u2_amd64.deb ........]
+
+Unpacking mariadb-client (1:10.11.14-0+deb12u2) over (1:10.11.11-0+deb12u1) ....]
+
+Setting up mariadb-common (1:10.11.14-0+deb12u2) ...............................]
+
+Progress: [ 53%] [################################..............................]
+Setting up libmariadb3:amd64 (1:10.11.14-0+deb12u2) ............................]
+
+Progress: [ 65%] [########################################......................]
+Setting up mariadb-client-core (1:10.11.14-0+deb12u2) ...####...................]
+
+Progress: [ 76%] [###############################################...............]
+Setting up mariadb-client (1:10.11.14-0+deb12u2) ...#################...........]
+
+Progress: [ 88%] [######################################################........]
+Processing triggers for libc-bin (2.36-9+deb12u10) ...######################....]
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 44
+Server version: 12.0.2-MariaDB-ubu2404 mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| dolidb             |
+| information_schema |
+| mysql              |
+| performance_schema |
+| prestashop_db      |
+| sys                |
++--------------------+
+6 rows in set (0.001 sec)
+
+MariaDB [(none)]>
+
+
+exit
+
+exit
+
+docker compose down -v
+docker volume rm dockerredis_prestashop_data
+docker compose up -d
+
