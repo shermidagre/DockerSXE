@@ -1,0 +1,41 @@
+services:
+  db:
+      container_name: sxe_pg_db
+      image: postgres
+      restart: always
+      ports:
+       - "5432:5432"
+      environment:
+        POSTGRES_USER: sxe_user_db
+        POSTGRES_PASSWORD: sxe_user_password_db
+        POSTGRES_DB: sxe_pg_db
+
+
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    depends_on:
+      - db
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: sxe_user_db
+      DB_PASS: sxe_user_password_db
+      DB_NAME: sxe_pg_db
+    restart: unless-stopped
+    ports:
+      - "8081:3000"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - db
+
+
