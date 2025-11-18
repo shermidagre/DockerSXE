@@ -32,8 +32,8 @@ services:
 
     depends_on:
 
-     - db
-     - redis
+      - db
+      - redis
 
 
 
@@ -64,7 +64,7 @@ services:
 
 
     ports:
-        - "8080:80"
+      - "8080:80"
 
 
     volumes:
@@ -77,7 +77,7 @@ services:
     image: phpmyadmin
     container_name: phpmyadmin
     depends_on:
-     -  db
+      -  db
 
     ports:
       - "8081:80"
@@ -100,38 +100,38 @@ services:
 
     volumes:
 
-        - ./redis_config/redis.conf:/redis-config/redis.conf
+      - ./redis_config/redis.conf:/redis-config/redis.conf
 
-        - redis_data:/data
+      - redis_data:/data
 
     command: redis-server /redis-config/redis.conf
 
   dolibarr:
-      image: dolibarr/dolibarr:latest
-      container_name: dolibarr
-      ports:
-        - "80:80"
+    image: dolibarr/dolibarr:latest
+    container_name: dolibarr
+    ports:
+      - "80:80"
 
-      environment:
-        DOLI_INIT_DEMO: ${DOLI_INIT_DEMO}
-        DOLI_DB_HOST: ${DOLI_DB_HOST}
-        DOLI_DB_NAME: ${DOLI_DB_NAME}
-        DOLI_DB_USER: ${DOLI_DB_USER}
-        DOLI_DB_PASSWORD: ${DOLI_DB_PASSWORD}
-        DOLI_URL_ROOT: "${DOLI_URL_ROOT}"
-        DOLI_ADMIN_LOGIN: "${DOLI_ADMIN_LOGIN}"
-        DOLI_ADMIN_PASSWORD: "${DOLI_ADMIN_PASSWORD}"
-        DOLI_CRON: ${DOLI_CRON}
-        DOLI_CRON_KEY: ${DOLI_CRON_KEY}
-        DOLI_COMPANY_NAME: ${DOLI_COMPANY_NAME}
-        WWW_USER_ID: ${WWW_USER_ID}
-        WWW_GROUP_ID: ${WWW_GROUP_ID}
+    environment:
+      DOLI_INIT_DEMO: ${DOLI_INIT_DEMO}
+      DOLI_DB_HOST: ${DOLI_DB_HOST}
+      DOLI_DB_NAME: ${DOLI_DB_NAME}
+      DOLI_DB_USER: ${DOLI_DB_USER}
+      DOLI_DB_PASSWORD: ${DOLI_DB_PASSWORD}
+      DOLI_URL_ROOT: "${DOLI_URL_ROOT}"
+      DOLI_ADMIN_LOGIN: "${DOLI_ADMIN_LOGIN}"
+      DOLI_ADMIN_PASSWORD: "${DOLI_ADMIN_PASSWORD}"
+      DOLI_CRON: ${DOLI_CRON}
+      DOLI_CRON_KEY: ${DOLI_CRON_KEY}
+      DOLI_COMPANY_NAME: ${DOLI_COMPANY_NAME}
+      WWW_USER_ID: ${WWW_USER_ID}
+      WWW_GROUP_ID: ${WWW_GROUP_ID}
 
-      links:
-        - db
-      volumes:
-        - /home/dolibarr_documents:/var/www/documents
-        - /home/dolibarr_custom:/var/www/html/custom
+    links:
+      - db
+    volumes:
+      - /home/dolibarr_documents:/var/www/documents
+      - /home/dolibarr_custom:/var/www/html/custom
 
 volumes:
 

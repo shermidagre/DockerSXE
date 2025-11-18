@@ -1,28 +1,35 @@
 services:
-  db:
-    image: postgres
-    container_name: odoo_db
-    restart: always
+  web:
+    image: odoo:18.0
+    depends_on:
+      - mydb
+    ports:
+      - "8069:8069"
     environment:
-      MYSQL_ROOT_PASSWORD: postgres
-      MYSQL_DATABASE: odoo
-      MYSQL_USER: odoo
-      MYSQL_PASSWORD: odoo
+      - HOST=mydb
+      - USER=odoo
+      - PASSWORD=myodoo
 
-      port: '5432'
-
+  mydb:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=myodoo
+      - POSTGRES_USER=odoo
     volumes:
-      - db_data:/var/lib/mysql
-
-    odoo:
-      image: odoo:18
-      container_name: odoo
-      restart: always
-      environment:
-        POSTGRES_USER: odoo
-
-
+      - db_data:/var/lib/postgresql/data
+  pgAdmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - mydb
+    ports:
+      - "8081:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=shermidagre@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=sxe_password_example
+    volumes:
+      - dbadmin_data:/var/lib/pgadmin
 
 volumes:
   db_data:
-  prestashop_data:
+  dbadmin_data:
