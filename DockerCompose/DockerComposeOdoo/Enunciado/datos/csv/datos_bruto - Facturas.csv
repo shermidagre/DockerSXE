@@ -1,0 +1,12 @@
+Número,Fecha de factura,Fecha de vencimiento,Forma de pago,Estado,Fecha de pago,Emisor,Destinatario,Producto,Tipo de Producto,Base imponible,IVA,IRPF,Total
+F001,2/11/2025,9/11/2025,Transferencia,Pagada,8/11/2025,PrimoPlus S.L.,Juan Pérez,Servicio de asesoría básica,Servicio,300,21%,,"363,00 €"
+F002,3/11/2025,10/11/2025,Transferencia,No pagada,,PrimoPlus S.L.,Laura Fernández,Informe personalizado de asesoría,Servicio,200,21%,,"242,00 €"
+F003,5/11/2025,12/11/2025,Transferencia,Pagada,10/11/2025,PrimoPlus S.L.,Pablo Martínez,Consultoría inicial,Servicio,150,21%,,181.5
+F004,8/11/2025,15/11/2025,Transferencia,Pagada,14/11/2025,PrimoPlus S.L.,María López,Consultoría avanzada,Servicio,450,21%,,544.5
+SINF-2025-001,4/11/2025,18/11/2025,Recibo domiciliado,Pagada,16/11/2025,Servicios Informáticos S.A.,PrimoPlus S.L.,Mantenimiento de servidores,Servicio,500,21%,,"605,00 €"
+TECHADV-2025-005,6/11/2025,8/11/2025,Recibo domiciliado,No pagada,9/11/2025,Tecnología Avanzada S.A.,PrimoPlus S.L.,Licencia de software,Servicio,800,21%,,"968,00 €"
+F005,9/11/2025,23/11/2025,Transferencia,No pagada,,PrimoPlus S.L.,Innovaciones Futuras S.L.,Auditoría de procesos,Servicio,1200,21%,,"1.452,00 €"
+SUMGEN-2025-101,10/11/2025,24/11/2025,Transferencia,No pagada,,Suministros Generales S.A.,PrimoPlus S.L.,Pack de folios A4,Consumible,100,21%,,"121,00 €"
+SUMGEN-2025-102,12/11/2025,19/11/2025,Transferencia,Pagada,18/11/2025,Suministros Generales S.A.,PrimoPlus S.L.,Cartuchos de tinta,Consumible,75,21%,,90.75
+SUMGEN-2025-103,13/11/2025,20/11/2025,Transferencia,Pagada,19/11/2025,Suministros Generales S.A.,PrimoPlus S.L.,Pack de material de oficina,Consumible,150,21%,,181.5
+SERV-015,15/11/2025,15/11/2025,Efectivo,Pagada,15/11/2025,Jose María Gutierrez López,PrimoPlus S.L.,Reparación de instalación eléctrica,Servicio,1000,21%,"15,00 %","1.060,00 €"

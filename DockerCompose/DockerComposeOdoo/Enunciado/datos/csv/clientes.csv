@@ -1,0 +1,12 @@
+Nombre,CIF,Dirección,Población,CP,Teléfono,Email,Rol (Cliente/Proveedor)
+Juan Pérez,64899420K,"Calle Secundaria, 45",Barcelona,8002,600123456,juan.perez@gmail.com,0
+Laura Fernández,Y8090252Q,"Avenida de las Flores, 21",Valencia,46007,690456789,laura.fdez@empresa.com,0
+Pablo Martínez,29357971N,"Paseo del Prado, 10",Madrid,28014,670123987,pablo.martinez@empresa.com,0
+María López,28213475L,"Calle Mayor, 77",Sevilla,41001,680345678,maria.lopez@negocios.com,0
+Innovaciones Futuras S.L.,A92715093,"Polígono Industrial Sur, 12",Bilbao,48001,944567123,contacto@innovaciones.com,0
+Servicios Informáticos S.A.,A37323409,"Calle de la Tecnología, 12",Valencia,46022,960123456,contacto@serviciosinfo.com,1
+Tecnología Avanzada S.A.,A43300888,"Avenida de la Innovación, 45",Madrid,28036,910789123,info@tecnologiaavanzada.com,1
+Suministros Generales S.A.,A43677673,"Polígono Industrial Norte, Parc",Barcelona,8030,930456789,pedidos@suministrosgenerales.com,1
+Jose María Gutierrez López,42545505J,"Gran Vía, 22 4F",Vigo,36201,666000111,jmguti@electricistas.com,1
+Luis García,32870065Y,"Avenida Libertad, 15",Zaragoza,50008,620789123,luis.garcia@autonomo.com,0
+Ana Torres,40074891J,"Plaza Nueva, 8",Granada,18009,630456987,ana.torres@consultoria.com,0
