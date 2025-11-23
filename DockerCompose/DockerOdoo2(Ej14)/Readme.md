@@ -117,4 +117,36 @@ ORDER BY
 
 ![img_12.png](img_12.png)
 
+---
+
+### Utilizando las tablas de odoo, obtén un listado de empresas proveedoras, que han
+### emitido algún reembolso (facturas rectificativas de proveedor)
+### - Nombre de la empresa
+### - Número de factura
+### - Fecha de la factura -total de factura con impuestos
+### - Total factura SIN impuestos
+###  Ordenadas por fecha de factura de modo que la primera sea la más reciente.
+
+```dotenv
+
+SELECT
+    rp.name AS Nombre_Empresa,
+    am.name AS Numero_Factura,
+    am.invoice_date AS Fecha_Factura,
+    am.amount_total AS Total_con_Impuestos,
+    am.amount_untaxed AS Total_SIN_Impuestos
+FROM
+    account_move am
+JOIN
+    res_partner rp ON am.partner_id = rp.id -- Une con la tabla de empresas/contactos
+WHERE
+    am.move_type = 'in_refund' -- Filtra por tipo: Factura Rectificativa de Proveedor (Reembolso)
+    AND am.state = 'posted' -- Filtra facturas Confirmadas/Publicadas
+ORDER BY
+    Fecha_Factura DESC;
+
+```
+![img_13.png](img_13.png)
+
+
 
