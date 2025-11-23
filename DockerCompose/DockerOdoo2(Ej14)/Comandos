@@ -1,0 +1,80 @@
+CREATE TABLE EmpresasFCT (
+    idEmpresa SERIAL PRIMARY KEY,
+    nombre VARCHAR(40) NOT NULL,
+    quiereAlumnos BOOLEAN,
+    numAlumnos INTEGER,
+    fechaContacto DATE
+);
+
+INSERT INTO EmpresasFCT (nombre, quiereAlumnos, numAlumnos, fechaContacto) VALUES
+('TecnoDev SL', TRUE, 3, '2025-10-20'),
+('Marketing Global FCT', TRUE, 1, '2025-11-15'),
+('Soluciones Logísticas FCT', FALSE, 0, '2024-05-01'),
+('Innovación y Diseño FCT', TRUE, 2, '2025-11-23'),
+('Servicios Administrativos EZ', FALSE, 1, '2025-01-10');
+
+SELECT
+    *
+FROM
+    EmpresasFCT
+ORDER BY
+    fechaContacto DESC;
+
+
+SELECT
+    rp.name AS Nombre_Contacto,
+    rc.name AS Nombre_Comercial_Empresa
+FROM
+    res_partner rp
+LEFT JOIN
+    res_partner rc ON rp.parent_id = rc.id -- Unir con la compañía padre
+WHERE
+    rp.is_company IS FALSE -- SOLO contactos que NO son empresas
+    AND (rp.city <> 'Tracy' OR rp.zip <> '95304') -- Cuya ciudad NO sea Tracy O código postal NO sea 95304
+    AND (rp.city IS NOT NULL AND rp.zip IS NOT NULL) -- Se asume que deben tener ciudad y zip para la condición
+ORDER BY
+    Nombre_Comercial_Empresa;
+
+
+SELECT
+    rp.name AS Nombre_Empresa,
+    am.name AS Numero_Factura,
+    am.invoice_date AS Fecha_Factura,
+    am.amount_total AS Total_con_Impuestos,
+    am.amount_untaxed AS Total_SIN_Impuestos
+FROM
+    account_move am
+JOIN
+    res_partner rp ON am.partner_id = rp.id -- Une con la tabla de empresas/contactos
+WHERE
+    am.move_type = 'in_refund' -- Filtra por tipo: Factura Rectificativa de Proveedor (Reembolso)
+    AND am.state = 'posted' -- Filtra facturas Confirmadas/Publicadas
+ORDER BY
+    Fecha_Factura DESC;
+
+
+
+SELECT
+    rp.name AS Nombre_Empresa,
+    COUNT(am.id) AS Numero_de_Facturas,
+    SUM(am.amount_total) AS Total_Facturado_CON_Impuestos,
+    SUM(am.amount_untaxed) AS Total_Facturado_SIN_Impuestos
+FROM
+    account_move am
+JOIN
+    res_partner rp ON am.partner_id = rp.id
+WHERE
+    am.move_type = 'out_invoice' -- Solo facturas de VENTA
+    AND am.state = 'posted' -- Solo facturas Confirmadas
+GROUP BY
+    rp.name
+HAVING
+    COUNT(am.id) > 2; -- La empresa debe tener más de 2 facturas
+
+
+UPDATE
+    res_partner
+SET
+    email = REPLACE(email, '@bilbao.example.com', '@bilbao.bizkaia.neus')
+WHERE
+    email LIKE '%@bilbao.example.com';
