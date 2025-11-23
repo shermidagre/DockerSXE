@@ -43,7 +43,28 @@ CREATE TABLE EmpresasFCT (
 
 ```
 
+En el cuadro de abajo se puede ver la tabla creada correctamente
+
+![img_8.png](img_8.png)
+
+----
+
+### Insertar datos en la tabla
+
+```dotenv
+
+INSERT INTO EmpresasFCT (nombre, quiereAlumnos, numAlumnos, fechaContacto) VALUES
+('TecnoDev SL', TRUE, 3, '2025-10-20'),
+('Marketing Global FCT', TRUE, 1, '2025-11-15'),
+('Soluciones Logísticas FCT', FALSE, 0, '2024-05-01'),
+('Innovación y Diseño FCT', TRUE, 2, '2025-11-23'),
+('Servicios Administrativos EZ', FALSE, 1, '2025-01-10');
+```
+
+----
+
 ![img_7.png](img_7.png)
 
 ----
+
 
