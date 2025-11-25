@@ -1,3 +1,4 @@
+down
 Valores de la db en el archivo .env
 
 # Creacion de la nueva bd
@@ -37,7 +38,7 @@ Entramos en la query tool
 ### herramienta PgAdmin u otro método que estimes oportuno, elabora y ejecuta una
 ### sentencia que cree una tabla llamada “EmpresasFCT“con los siguientes campos:
 ### ● idEmpresa: autonumérico. Este campo será la clave primaria.
-### ● nombre: Texto con tamaño máximo de 40 caracteres. -useChatgpt: booleano, por defecto a true
+### ● nombre: Texto con tamaño máximo de 40 caracteres.
 ### ● quiereAlumnos: Booleano.
 ### ● numAlumnos: número entero.
 ### ● fechaContacto: tipo fecha
