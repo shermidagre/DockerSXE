@@ -118,12 +118,11 @@ LEFT JOIN
 WHERE
     rp.is_company IS FALSE -- SOLO contactos que NO son empresas
     AND (rp.city <> 'Tracy')
-    AND (rp.city IS NOT NULL AND rp.zip IS NOT NULL) -- Se asume que deben tener ciudad y zip para la condición
+    AND (rp.city IS NOT NULL) -- Se asume que deben tener ciudad y zip para la condición
 ORDER BY
     Nombre_Comercial_Empresa;
 ````
-
-![img_12.png](img_12.png)
+![img_17.png](img_17.png)
 
 ---
 ## 5
@@ -131,7 +130,7 @@ ORDER BY
 ### emitido algún reembolso (facturas rectificativas de proveedor)
 ### - Nombre de la empresa
 ### - Número de factura
-### - Fecha de la factura -total de factura con impuestos
+### - Fecha de la factura
 ### - Total factura SIN impuestos
 ###  Ordenadas por fecha de factura de modo que la primera sea la más reciente.
 
@@ -141,7 +140,6 @@ SELECT
     rp.name AS Nombre_Empresa,
     am.name AS Numero_Factura,
     am.invoice_date AS Fecha_Factura,
-    am.amount_total AS Total_con_Impuestos,
     am.amount_untaxed AS Total_SIN_Impuestos
 FROM
     account_move am
@@ -154,7 +152,7 @@ ORDER BY
     Fecha_Factura DESC;
 
 ```
-![img_13.png](img_13.png)
+![img_18.png](img_18.png)
 
 ## 6
 ### Utilizando las tablas de odoo, obtén un listado de empresas clientes, a las que se les
@@ -169,7 +167,7 @@ ORDER BY
 SELECT
     rp.name AS Nombre_Empresa,
     COUNT(am.id) AS Numero_de_Facturas,
-    SUM(am.amount_total) AS Total_Facturado_CON_Impuestos,
+    SUM(am.amount_untaxed) AS Total_Facturado_SIN_Impuestos
 FROM
     account_move am
 JOIN
@@ -183,8 +181,8 @@ HAVING
     COUNT(am.id) > 2; -- La empresa debe tener más de 2 facturas
 
 ```
+![img_19.png](img_19.png)
 
-![img_14.png](img_14.png)
 ---
 
 ## 7
