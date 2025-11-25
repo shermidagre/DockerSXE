@@ -160,7 +160,7 @@ ORDER BY
 ### ha emitido más de dos facturas de venta (solo venta) confirmadas, mostrando los
 ### siguientes datos:
 ### - Nombre de la empresa
-### - Número de facturas -total de factura con impuestos
+### - Número de facturas
 ### - Total facturado SIN IMPUESTOS
 
 ```dotenv
@@ -169,7 +169,6 @@ SELECT
     rp.name AS Nombre_Empresa,
     COUNT(am.id) AS Numero_de_Facturas,
     SUM(am.amount_total) AS Total_Facturado_CON_Impuestos,
-    SUM(am.amount_untaxed) AS Total_Facturado_SIN_Impuestos
 FROM
     account_move am
 JOIN
