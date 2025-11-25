@@ -93,7 +93,7 @@ SELECT * FROM EmpresasFCT ORDER BY fechaContacto DESC;
 ### Realiza una consulta que permita obtener un listado de todos los contactos de
 ### Odoo (no empresas) con la siguiente información:
 ### - Nombre
-### - Cuya ciudad NO sea Tracy, y código postal 95304
+### - Cuya ciudad NO sea Tracy
 ### - Nombre comercial de la empresa
 ### ordenados alfabéticamente por el nombre comercial de la empresa.
 
@@ -116,7 +116,7 @@ LEFT JOIN
     res_partner rc ON rp.parent_id = rc.id -- Unir con la compañía padre
 WHERE
     rp.is_company IS FALSE -- SOLO contactos que NO son empresas
-    AND (rp.city <> 'Tracy' OR rp.zip <> '95304') -- Cuya ciudad NO sea Tracy O código postal NO sea 95304
+    AND (rp.city <> 'Tracy')
     AND (rp.city IS NOT NULL AND rp.zip IS NOT NULL) -- Se asume que deben tener ciudad y zip para la condición
 ORDER BY
     Nombre_Comercial_Empresa;
