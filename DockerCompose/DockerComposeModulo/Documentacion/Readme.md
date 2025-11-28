@@ -157,7 +157,7 @@ volumes:
 
 #### Iniciar sesion
 
-![img_2.png](ImagenesReadme/img_2.png)
+![img_2.png](ImagenesReadme/img_2.png)r
 
 #### Busqueda del modulo (activar modo desarollador)
 
@@ -165,7 +165,7 @@ volumes:
 
 #### Busqueda del modulo
 
-![img_4.png](ImagenesReadme/img_4.png)
+![img4.png](ImagenesReadme/img4.png)
 
 #### Comprobacion del modulo instalado
 
