@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bb5d02ee-d233-4460-ba4c-85a0d21c0476" name="Changes" comment="Readme y archivo env">
+      <change afterPath="$PROJECT_DIR$/../.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/DockerSXE.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/copilot.data.migration.ask.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/copilot.data.migration.edit.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/DockerCompose.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeModulo/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeModulo/Documentacion/ImagenesReadme/PreviewFactura.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeModulo/Documentacion/Readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeModulo/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/DockerComposeOdoo.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/copilot.data.migration.ask.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/copilot.data.migration.edit.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposeOdoo/Enunciado/datos/ods/datos_bruto.ods" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePostgresPgAdmin/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePostgresPgAdmin/.idea/DockerComposePostgresPgAdmin.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePostgresPgAdmin/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePostgresPgAdmin/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePostgresPgAdmin/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePrestashop/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePrestashop/.idea/DockerComposePrestashop.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePrestashop/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePrestashop/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerComposePrestashop/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/DockerOdoo2(Ej14).iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/copilot.data.migration.ask.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/copilot.data.migration.edit.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerOdoo2(Ej14)/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerRedis/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerRedis/.idea/DockerRedis.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerRedis/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerRedis/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DockerRedis/.idea/vcs.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;shermidagre&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/shermidagre/DockerSXE.git&quot;,
+    &quot;accountId&quot;: &quot;2cf05fe5-88c1-4123-81d2-3f8fdc680ccc&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="34C7rRqMK6ICLoMlNSHHeOTccuh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/samue/Documents/dam2/DockerSXE/DockerCompose/DockerComposeModulo"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\samue\Documents\dam2\DockerSXE\DockerCompose\DockerComposeModulo" />
+    </key>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bb5d02ee-d233-4460-ba4c-85a0d21c0476" name="Changes" comment="" />
+      <created>1760705898634</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760705898634</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Readme y archivo env">
+      <option name="closed" value="true" />
+      <created>1760709039570</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1760709039570</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Readme y archivo env">
+      <option name="closed" value="true" />
+      <created>1760709148465</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1760709148465</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Readme y archivo env" />
+    <option name="LAST_COMMIT_MESSAGE" value="Readme y archivo env" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
