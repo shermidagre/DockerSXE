@@ -9,7 +9,37 @@
 
 ## Primero crearemos nuestra estructura del proyecto sin datos para a posterior establecer lo necesario
 
-![img.png](img.png)
+![img.png](ImagenesReadme/img.png)
+
+---
+
+### Se empezara creando el scaffold de nuestro proyecto mediante los siguientes comandos e instrucciones
+
+
+````dotenv
+
+Se ejecutara el docker ps para identificar que contenedores estan activos actualmente y asi poder entrar a la consola de nuestro contenedor odoo
+
+Comando --> docker ps 
+
+Proseguido cogeremos la id de nuestro contenedor de odoo para asi poder ejecutar el exect sobre el mismo y entrar en la terminal 
+
+Comando --> docker exec -it <Id de tu contenedor> bash
+
+Dentro ya de la bash ejecutaremos el comando para asi poder crear el scaffold, este mismo lo que hace es crear las carpetas necesarias para la creacion del modulo a posteriori
+
+Comando --> odoo scaffold <Nombre que le vayas a dar a tu proyecto /mnt/extra-addons/
+
+````
+---
+
+#### Ejemplo de uso
+
+![img8.png](ImagenesReadme/img8.png)
+
+
+---
+
 
 ---
 
@@ -120,8 +150,35 @@ volumes:
 
 ### Paso 1 (Crear Database)
 
+![img_1.png](ImagenesReadme/img_1.png)
+
 
 ### Paso 2 (Buscar nuestro modulo)
+
+#### Iniciar sesion
+
+![img_2.png](ImagenesReadme/img_2.png)
+
+#### Busqueda del modulo (activar modo desarollador)
+
+![img_3.png](ImagenesReadme/img_3.png)
+
+#### Busqueda del modulo
+
+![img_4.png](ImagenesReadme/img_4.png)
+
+#### Comprobacion del modulo instalado
+
+![img_6.png](ImagenesReadme/img_6.png)
+
+#### *Clickando en informacion podremos encontrar nuestro querido modulo*
+
+![img_5.png](ImagenesReadme/img_5.png)
+
+#### *Comprobacion de donde esta instalado0*
+
+![img_7.png](ImagenesReadme/img_7.png)
+
 
 
 ### Paso 3 (Installar nuestro modulo)
