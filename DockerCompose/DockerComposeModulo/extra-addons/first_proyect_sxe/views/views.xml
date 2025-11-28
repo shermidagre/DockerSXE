@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="first_proyect_sxe.form">
+      <field name="name">Nivel de Sueño Form</field>
+      <field name="model">first_proyect_sxe.first_proyect_sxe</field>
+      <field name="arch" type="xml">
+        <form string="Registro de Sueño del Alumno">
+          <sheet>
+            <group>
+              <field name="alumno"/> <field name="nivel_sueno"/> <field name="bebida_recomendada" readonly="1"/> </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
 
     <record model="ir.ui.view" id="first_proyect_sxe.list">
       <field name="name">firstProyectSXE list</field>
       <field name="model">first_proyect_sxe.first_proyect_sxe</field>
       <field name="arch" type="xml">
         <list>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
+          <field name="alumno"/>
+          <field name="nivel_sueno"/>
+          <field name="bebida_recomendada"
+                 decoration-info="nivel_sueno &lt; 4"
+                 decoration-warning="nivel_sueno &gt;= 4 and nivel_sueno &lt; 7"
+                 decoration-danger="nivel_sueno &gt;= 7"/>
         </list>
       </field>
     </record>
 
-    <!-- actions opening views on models -->
-
     <record model="ir.actions.act_window" id="first_proyect_sxe.action_window">
-      <field name="name">firstProyectSXE window</field>
-      <field name="res_model">first_proyect_sxe.first_proyect_sxe</field>
-      <field name="view_mode">list,form</field>
+        <field name="view_mode">form</field>
+        <field name="name">Control de Sueño del Alumnado</field>
+       <field name="res_model">first_proyect_sxe.first_proyect_sxe</field>
     </record>
-
-    <!-- server action to the one above -->
 
     <record model="ir.actions.server" id="first_proyect_sxe.action_server">
       <field name="name">firstProyectSXE server</field>
@@ -32,27 +43,18 @@
       <field name="code">
         action = {
           "type": "ir.actions.act_window",
-          "view_mode": "list,form",
+          "view_mode": "tree,form",
           "res_model": model._name,
         }
       </field>
     </record>
 
-    <!-- Top menu item -->
+    <menuitem name="Control de Sueño SXE" id="first_proyect_sxe.menu_root"/>
 
-    <menuitem name="firstProyectSXE" id="first_proyect_sxe.menu_root"/>
+    <menuitem name="Registrar Sueño" id="first_proyect_sxe.menu_1" parent="first_proyect_sxe.menu_root"/>
 
-    <!-- menu categories -->
-
-    <menuitem name="Menu 1" id="first_proyect_sxe.menu_1" parent="first_proyect_sxe.menu_root"/>
-    <menuitem name="Menu 2" id="first_proyect_sxe.menu_2" parent="first_proyect_sxe.menu_root"/>
-
-    <!-- actions -->
-
-    <menuitem name="List" id="first_proyect_sxe.menu_1_list" parent="first_proyect_sxe.menu_1"
+    <menuitem name="Alumnos y Bebidas" id="first_proyect_sxe.menu_1_list" parent="first_proyect_sxe.menu_1"
               action="first_proyect_sxe.action_window"/>
-    <menuitem name="Server to list" id="first_proyect_sxe" parent="first_proyect_sxe.menu_2"
-              action="first_proyect_sxe.action_server"/>
 
-  </data>
+    </data>
 </odoo>

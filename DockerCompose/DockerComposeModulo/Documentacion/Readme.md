@@ -174,12 +174,14 @@ volumes:
 ---
 ![img_6.png](ImagenesReadme/img_6.png)
 
-#### *Clickando en informacion podremos encontrar nuestro querido modulo*
+#### Probamos a crear una nueva anotacion con su respectiva etiqueta y sus valores
 
-![img_5.png](ImagenesReadme/img_5.png)
+![img.png](ImagenesReadme/img_5.png)
 
+#### ¿Que haremos despues de instalar nuestro modulo?
 
-#### ¿Que ha pasado despues de instalar nuestro modulo?
+#### Pues le daremos los valores que requiere el enunciado.
+
 
 ---
 

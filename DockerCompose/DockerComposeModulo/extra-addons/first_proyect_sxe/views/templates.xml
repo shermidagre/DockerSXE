@@ -2,22 +2,27 @@
 
 <odoo>
     <data>
-        <template id="listing">
+        <template id="listing" name="Listado de Alumnos y Sueño">
           <ul>
             <li t-foreach="objects" t-as="object">
               <a t-attf-href="#{ root }/objects/#{ object.id }">
-                <t t-esc="object.display_name"/>
+                <t t-esc="object.alumno"/> (Nivel de Sueño: <t t-esc="object.nivel_sueno"/>)
               </a>
             </li>
           </ul>
         </template>
-        <template id="object">
-          <h1><t t-esc="object.display_name"/></h1>
+
+        <template id="object" name="Detalle de Nivel de Sueño">
+          <h1><t t-esc="object.alumno"/></h1>
           <dl>
-            <t t-foreach="object._fields" t-as="field">
-              <dt><t t-esc="field"/></dt>
-              <dd><t t-esc="object[field]"/></dd>
-            </t>
+            <dt>Nivel de Sueño:</dt>
+            <dd><t t-esc="object.nivel_sueno"/></dd>
+
+            <dt>Bebida Recomendada:</dt>
+            <dd><strong><t t-esc="object.bebida_recomendada"/></strong></dd>
+
+            <dt>Notas:</dt>
+            <dd><t t-esc="object.description"/></dd>
           </dl>
         </template>
     </data>
