@@ -7,6 +7,7 @@
             <li t-foreach="objects" t-as="object">
               <a t-attf-href="#{ root }/objects/#{ object.id }">
                 <t t-esc="object.alumno"/> (Nivel de Sueño: <t t-esc="object.nivel_sueno"/>)
+                <t t-if="object.fecha_registro"> - Registrado: <t t-esc="object.fecha_registro" t-options='{"widget": "datetime"}'/></t>
               </a>
             </li>
           </ul>
@@ -15,14 +16,17 @@
         <template id="object" name="Detalle de Nivel de Sueño">
           <h1><t t-esc="object.alumno"/></h1>
           <dl>
-            <dt>Nivel de Sueño:</dt>
-            <dd><t t-esc="object.nivel_sueno"/></dd>
+              <dt>Fecha y Hora del Registro:</dt>
+              <dd><t t-esc="object.fecha_registro" t-options='{"widget": "datetime"}'/></dd>
 
-            <dt>Bebida Recomendada:</dt>
-            <dd><strong><t t-esc="object.bebida_recomendada"/></strong></dd>
+              <dt>Nivel de Sueño:</dt>
+              <dd><t t-esc="object.nivel_sueño"/></dd>
 
-            <dt>Notas:</dt>
-            <dd><t t-esc="object.description"/></dd>
+              <dt>Bebida Recomendada:</dt>
+              <dd><strong><t t-esc="object.bebida_recomendada"/></strong></dd>
+
+              <dt>Notas:</dt>
+              <dd><t t-esc="object.description"/></dd>
           </dl>
         </template>
     </data>

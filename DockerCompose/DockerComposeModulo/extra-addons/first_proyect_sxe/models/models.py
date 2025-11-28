@@ -13,7 +13,7 @@ class first_proyect_sxe(models.Model):
     alumno = fields.Char(string='Nombre del Alumno', required=True)
 
     # Campo 'value' reemplazado por 'nivel_sueno' (almacenado en DB)
-    nivel_sueno = fields.Integer(
+    nivel_sueño = fields.Integer(
         string='Nivel de Sueño (1-10)',
         required=True,
         default=1,
@@ -27,24 +27,31 @@ class first_proyect_sxe(models.Model):
         store=False
     )
 
+    # Nuevo campo para la marca de tiempo del registro
+    fecha_registro = fields.Datetime(
+        string='Fecha y Hora del Registro',
+        required=True,
+        default=fields.Datetime.now,
+        help="Momento en que se registró el nivel de sueño."
+    )
+
     # Mantenemos el campo 'description' por si se usaba, aunque no es requerido por la especificación.
     description = fields.Text(string='Notas')
 
-    # Método computado para determinar la bebida
-    @api.depends('nivel_sueno')
+    # Método computado para determinar la bebida (Calulo del sueño)
+    @api.depends('nivel_sueño')
     def _compute_recommended_drink(self):
         for record in self:
-            sueno = record.nivel_sueno
+            sueño = record.nivel_sueño
 
-            if sueno >= 1 and sueno <= 3:
+            if sueño >= 1 and sueño <= 3:
                 record.bebida_recomendada = "Café con leche 🥛☕"
-            elif sueno >= 4 and sueno <= 6:
+            elif sueño >= 4 and sueño <= 6:
                 record.bebida_recomendada = "Café solo largo ☕"
-            elif sueno >= 7 and sueno <= 9:
+            elif sueño >= 7 and sueño <= 9:
                 record.bebida_recomendada = "Café solo larguísimo 😵‍💫"
-            elif sueno == 10:
+            elif sueño == 10:
                 record.bebida_recomendada = "💉 Inyección de adrenalina (¡Máximo Sueño!)"
             else:
                 record.bebida_recomendada = "Nivel de sueño fuera del rango (1-10)"
 
-    # Eliminamos el método _value_pc ya que no es necesario.

@@ -9,23 +9,44 @@
         <form string="Registro de Sueño del Alumno">
           <sheet>
             <group>
-              <field name="alumno"/> <field name="nivel_sueno"/> <field name="bebida_recomendada" readonly="1"/> </group>
+              <field name="alumno"/> <field name="nivel_sueño"/> <field name="bebida_recomendada" readonly="1"/> </group>
           </sheet>
         </form>
       </field>
     </record>
+
+      <record id="first_proyect_sxe.search" model="ir.ui.view">
+      <field name="name">Nivel de Sueño Search</field>
+      <field name="model">first_proyect_sxe.first_proyect_sxe</field>
+      <field name="arch" type="xml">
+        <search string="Buscar Registros de Sueño">
+          <field name="alumno"/>
+          <field name="nivel_sueño"/>
+
+          <filter string="Alerta de Sueño (Nivel 10)" name="nivel_10" domain="[('nivel_sueno', '=', 10)]"/>
+
+          <group expand="0" string="Agrupar Por">
+            <filter string="Alumno" name="group_by_alumno" context="{'group_by':'alumno'}"/>
+            <filter string="Fecha" name="group_by_fecha" context="{'group_by':'fecha_registro:day'}"/>
+          </group>
+        </search>
+      </field>
+    </record>
+
+
 
     <record model="ir.ui.view" id="first_proyect_sxe.list">
       <field name="name">firstProyectSXE list</field>
       <field name="model">first_proyect_sxe.first_proyect_sxe</field>
       <field name="arch" type="xml">
         <list>
-          <field name="alumno"/>
-          <field name="nivel_sueno"/>
-          <field name="bebida_recomendada"
-                 decoration-info="nivel_sueno &lt; 4"
-                 decoration-warning="nivel_sueno &gt;= 4 and nivel_sueno &lt; 7"
-                 decoration-danger="nivel_sueno &gt;= 7"/>
+            <field name="alumno"/>
+            <field name="fecha_registro" optional="show"/>
+            <field name="nivel_sueño"/>
+            <field name="bebida_recomendada"
+                 decoration-info="nivel_sueño &lt; 4"
+                 decoration-warning="nivel_sueño &gt;= 4 and nivel_sueño &lt; 7"
+                 decoration-danger="nivel_sueño &gt;= 7"/>
         </list>
       </field>
     </record>

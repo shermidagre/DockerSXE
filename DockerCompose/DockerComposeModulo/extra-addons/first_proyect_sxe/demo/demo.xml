@@ -3,14 +3,14 @@
     <data noupdate="1">
           <record id="object0" model="first_proyect_sxe.first_proyect_sxe">
             <field name="alumno">Juan P.</field>
-            <field name="nivel_sueno">2</field> </record>
+            <field name="nivel_sueño">2</field> </record>
 
           <record id="object1" model="first_proyect_sxe.first_proyect_sxe">
             <field name="alumno">Ana S.</field>
-            <field name="nivel_sueno">5</field> </record>
+            <field name="nivel_sueño">5</field> </record>
 
           <record id="object2" model="first_proyect_sxe.first_proyect_sxe">
             <field name="alumno">Carlos B.</field>
-            <field name="nivel_sueno">9</field> </record>
+            <field name="nivel_sueño">9</field> </record>
     </data>
 </odoo>
