@@ -169,19 +169,14 @@ volumes:
 
 #### Comprobacion del modulo instalado
 
+---
+#### *Tan pronto se realiza la instalacion automaticamente ya te entra tu aplicacion*
+---
 ![img_6.png](ImagenesReadme/img_6.png)
 
 #### *Clickando en informacion podremos encontrar nuestro querido modulo*
 
 ![img_5.png](ImagenesReadme/img_5.png)
-
-#### *Comprobacion de donde esta instalado0*
-
-![img_7.png](ImagenesReadme/img_7.png)
-
-
-
-### Paso 3 (Installar nuestro modulo)
 
 
 #### ¿Que ha pasado despues de instalar nuestro modulo?

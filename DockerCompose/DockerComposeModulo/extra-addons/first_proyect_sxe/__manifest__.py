@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
 
-    'name': "first_proyect_sxe",
+    'name': "firstProyectSXE",
     'summary': "Módulo para ver que alumno esta mas dormido 0",
 
     'description': """ 

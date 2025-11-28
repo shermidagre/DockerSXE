@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
     <!-- explicit list view definition -->
@@ -13,7 +14,6 @@
         </list>
       </field>
     </record>
--->
 
     <!-- actions opening views on models -->
 
@@ -22,7 +22,6 @@
       <field name="res_model">first_proyect_sxe.first_proyect_sxe</field>
       <field name="view_mode">list,form</field>
     </record>
--->
 
     <!-- server action to the one above -->
 
@@ -38,7 +37,6 @@
         }
       </field>
     </record>
--->
 
     <!-- Top menu item -->
 
