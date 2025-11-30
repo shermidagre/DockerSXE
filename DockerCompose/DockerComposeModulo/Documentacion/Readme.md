@@ -183,6 +183,10 @@ volumes:
 #### Pues le daremos los valores que requiere el enunciado.
 
 
+![alt text](image.png)
+
+*Con este tuneillo que le metemos tambien la hora a la que se inscribio y un par de ejemplos*
+
 ---
 
 ## 🔗 Enlaces Útiles (v18)

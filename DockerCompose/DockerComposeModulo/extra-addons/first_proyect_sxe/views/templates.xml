@@ -20,7 +20,7 @@
               <dd><t t-esc="object.fecha_registro" t-options='{"widget": "datetime"}'/></dd>
 
               <dt>Nivel de Sueño:</dt>
-              <dd><t t-esc="object.nivel_sueño"/></dd>
+              <dd><t t-esc="object.nivel_sueno"/></dd>
 
               <dt>Bebida Recomendada:</dt>
               <dd><strong><t t-esc="object.bebida_recomendada"/></strong></dd>

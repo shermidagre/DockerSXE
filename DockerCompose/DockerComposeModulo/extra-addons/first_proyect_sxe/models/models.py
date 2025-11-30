@@ -13,7 +13,7 @@ class first_proyect_sxe(models.Model):
     alumno = fields.Char(string='Nombre del Alumno', required=True)
 
     # Campo 'value' reemplazado por 'nivel_sueno' (almacenado en DB)
-    nivel_sueño = fields.Integer(
+    nivel_sueno = fields.Integer(
         string='Nivel de Sueño (1-10)',
         required=True,
         default=1,
@@ -38,20 +38,20 @@ class first_proyect_sxe(models.Model):
     # Mantenemos el campo 'description' por si se usaba, aunque no es requerido por la especificación.
     description = fields.Text(string='Notas')
 
-    # Método computado para determinar la bebida (Calulo del sueño)
-    @api.depends('nivel_sueño')
+    # Método computado para determinar la bebida (Calculo del sueño)
+    @api.depends('nivel_sueno')
     def _compute_recommended_drink(self):
         for record in self:
-            sueño = record.nivel_sueño
 
-            if sueño >= 1 and sueño <= 3:
+            nivel = record.nivel_sueno 
+
+            if nivel >= 1 and nivel <= 3:
                 record.bebida_recomendada = "Café con leche 🥛☕"
-            elif sueño >= 4 and sueño <= 6:
+            elif nivel >= 4 and nivel <= 6:
                 record.bebida_recomendada = "Café solo largo ☕"
-            elif sueño >= 7 and sueño <= 9:
+            elif nivel >= 7 and nivel <= 9:
                 record.bebida_recomendada = "Café solo larguísimo 😵‍💫"
-            elif sueño == 10:
+            elif nivel == 10:
                 record.bebida_recomendada = "💉 Inyección de adrenalina (¡Máximo Sueño!)"
             else:
                 record.bebida_recomendada = "Nivel de sueño fuera del rango (1-10)"
-
