@@ -1,51 +1,52 @@
----
-# 📄 Guía de Importación de un nuevo modulo en Odoo
-
-> **Compatible con**: Odoo Community v18.0  
-> **Autor**: Samuel Hermida Gregores  
 
 ---
 
-## Primero crearemos nuestra estructura del proyecto sin datos para a posterior establecer lo necesario
+# 📄 Guía de Importación de un nuevo módulo en Odoo
+
+> **✅ Compatible con**: Odoo Community v18.0  
+> **🧑‍💻 Autor**: Samuel Hermida Gregores
+
+---
+
+## 🗂️ Paso 1: Estructura inicial del proyecto
+
+Primero crearemos nuestra estructura del proyecto **sin datos**, para a posteriori establecer lo necesario.
 
 ![img.png](ImagenesReadme/img.png)
 
 ---
 
-### Se empezara creando el scaffold de nuestro proyecto mediante los siguientes comandos e instrucciones
+### 🛠️ Creación del *scaffold* del módulo
 
+Se empezará creando el *scaffold* de nuestro proyecto mediante los siguientes comandos e instrucciones:
 
-````dotenv
-
-Se ejecutara el docker ps para identificar que contenedores estan activos actualmente y asi poder entrar a la consola de nuestro contenedor odoo
+```dotenv
+Se ejecutará el docker ps para identificar qué contenedores están activos actualmente y así poder entrar a la consola de nuestro contenedor Odoo.
 
 Comando --> docker ps 
 
-Proseguido cogeremos la id de nuestro contenedor de odoo para asi poder ejecutar el exect sobre el mismo y entrar en la terminal 
+Proseguido, cogeremos la ID de nuestro contenedor de Odoo para así poder ejecutar el exec sobre el mismo y entrar en la terminal.
 
 Comando --> docker exec -it <Id de tu contenedor> bash
 
-Dentro ya de la bash ejecutaremos el comando para asi poder crear el scaffold, este mismo lo que hace es crear las carpetas necesarias para la creacion del modulo a posteriori
+Dentro ya de la bash, ejecutaremos el comando para así poder crear el scaffold. Este mismo lo que hace es crear las carpetas necesarias para la creación del módulo a posteriori.
 
-Comando --> odoo scaffold <Nombre que le vayas a dar a tu proyecto /mnt/extra-addons/
+Comando --> odoo scaffold <Nombre que le vayas a dar a tu proyecto> /mnt/extra-addons/
+```
 
-````
 ---
 
-#### Ejemplo de uso
+#### 💡 Ejemplo de uso
 
 ![img8.png](ImagenesReadme/img8.png)
 
-
 ---
 
+### 🐳 Configuración de `docker-compose.yaml`
 
----
+Teniendo ya este formato, crearemos nuestro archivo `docker-compose.yaml` para levantar nuestro servicio Odoo:
 
-### Teniendo ya este formato crearemos nuestro docker-compose para a posterior levantar nuestro servicio odoo
-
-````yaml
-
+```yaml
 services:
   web:
     image: odoo:18.0
@@ -90,20 +91,21 @@ volumes:
   db_odoo:
   odoo:
   dbadmin_data:
-
-````
+```
 
 ---
 
-### Especificaremos las caracteristicas del modulo que queremos crear en odoo en el archivo **Manifest**
+### 📦 Archivo `__manifest__.py` (Manifest)
 
-#### Aqui iran las especificaciones basicas, pero se pueden meter mas campos en este **Manifest**
+Especificaremos las características del módulo que queremos crear en Odoo en el archivo **Manifest**.
 
-````dotenv
+> Aquí irán las especificaciones básicas, pero se pueden incluir más campos si es necesario.
 
+```env
 # -*- coding: utf-8 -*-
+{
 
-    'name': "Cafe_al_fallo",
+    'name': "firstProyectSXE",
     'summary': "Módulo para ver que alumno esta mas dormido 0",
 
     'description': """ 
@@ -118,90 +120,113 @@ volumes:
     en Odoo que asigne la bebida adecuada según el sueño de cada usuario.""",
 
     'author': "Samuel Hermida Gregores",
-    'website': "https://www.cafealfallo.org",
+    'website': "https://www.algo.org",
 
-
-    'category': 'CafeLovers',
+    'category': 'Uncategorized',
     'version': '0.1',
-    
-    
+
     'depends': ['base'],
 
     'data': [
-        'security/ir.model.acces.csv',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml'
     ],
 
     'demo':[
-        'demo/demol.xml'
+        'demo/demo.xml'
     ],
-
-    'installable': True,
-    'auto_install': False,
-
-
-````
+}
+```
 
 ---
 
-## Probaremos a levantar el servicio y buscar en odoo nuestro modulo creado
+## 🧪 Pruebas: Levantar y probar el módulo
 
-### Paso 1 (Crear Database)
+### Paso 1: Crear base de datos
 
 ![img_1.png](ImagenesReadme/img_1.png)
 
+---
 
-### Paso 2 (Buscar nuestro modulo)
+### Paso 2: Buscar y activar el módulo
 
-#### Iniciar sesion
+#### 🔐 Iniciar sesión
 
-![img_2.png](ImagenesReadme/img_2.png)r
+![img_2.png](ImagenesReadme/img_2.png)
 
-#### Busqueda del modulo (activar modo desarollador)
+#### 🔍 Activar modo desarrollador y buscar el módulo
 
 ![img_3.png](ImagenesReadme/img_3.png)
 
-#### Busqueda del modulo
+#### 📥 Instalar el módulo
 
 ![img4.png](ImagenesReadme/img4.png)
 
-#### Comprobacion del modulo instalado
+---
+
+### 🎉 ¡Módulo instalado!
+
+> Tan pronto se realiza la instalación, automáticamente ya te entra tu aplicación.
+
+![img_1.png](ImagenesReadme/img_43.png)
 
 ---
-#### *Tan pronto se realiza la instalacion automaticamente ya te entra tu aplicacion*
+
+### ➕ Crear una nueva anotación
+
+Probamos a crear una nueva anotación con su respectiva etiqueta y sus valores.
+
+![img.png](ImagenesReadme/imgr.png)  
+![img.png](ImagenesReadme/img31.png)
+
 ---
-![img_6.png](ImagenesReadme/img_6.png)
 
-#### Probamos a crear una nueva anotacion con su respectiva etiqueta y sus valores
+### 📝 ¿Qué haremos después de instalar nuestro módulo?
 
-![img.png](ImagenesReadme/img_5.png)
+Pues le daremos los valores que requiere el enunciado.
 
-#### ¿Que haremos despues de instalar nuestro modulo?
+![alt text](ImagenesReadme/image.png)
 
-#### Pues le daremos los valores que requiere el enunciado.
+> *A partir de aquí son cookeadas a parte*
 
+---
 
-![alt text](image.png)
+### 🔍 ¿Quieres filtrarlos?
 
-*Con este tuneillo que le metemos tambien la hora a la que se inscribio y un par de ejemplos*
+¡Pam! Aquí lo tienes:
+
+![img_1.png](ImagenesReadme/imgsfg.png)
+
+---
+
+### ⭐ ¿Eso no te sirve y también le quieres dar a favoritos?
+
+**¡Pim Pam! Toma Lacasitos! Ahí lo tienes.**
+
+![img.png](ImagenesReadme/asddas.png)
+
+> *Con este tuneillo que le metemos también la hora a la que se inscribió y un par de ejemplos*
 
 ---
 
 ## 🔗 Enlaces Útiles (v18)
 
-- 📚 Documentación oficial DockerHub : [https://hub.docker.com/_/odoo](https://hub.docker.com/_/odoo)
-- 📚 Documentación oficial Odoo : [https://www.odoo.com/documentation/18.0](https://www.odoo.com/documentation/18.0)  
+- 📚 **Documentación oficial DockerHub**: [https://hub.docker.com/_/odoo](https://hub.docker.com/_/odoo)
+- 📚 **Documentación oficial Odoo**: [https://www.odoo.com/documentation/18.0](https://www.odoo.com/documentation/18.0)
 
 ---
 
 ## 🆘 Soporte
 
 ¿Problemas con la importación?  
-📧 shermidagre@gmail.com 
+📧 **Contacto**: shermidagre@gmail.com
 
-🛠️ Adjunta:
+🛠️ **Adjunta**:
 - Captura del error
+
 ---
+
+> ✨ ¡Y listo! Tu módulo debería estar funcionando correctamente dentro de tu instancia de Odoo Community v18.0.
 
 ---
