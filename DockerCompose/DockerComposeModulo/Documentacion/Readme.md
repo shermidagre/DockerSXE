@@ -1,5 +1,4 @@
 ---
-
 # 📄 Guía de Importación de un nuevo modulo en Odoo
 
 > **Compatible con**: Odoo Community v18.0  
@@ -45,7 +44,7 @@ Comando --> odoo scaffold <Nombre que le vayas a dar a tu proyecto /mnt/extra-ad
 
 ### Teniendo ya este formato crearemos nuestro docker-compose para a posterior levantar nuestro servicio odoo
 
-````dotenv
+````yaml
 
 services:
   web:
