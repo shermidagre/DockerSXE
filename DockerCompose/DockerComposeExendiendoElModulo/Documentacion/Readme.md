@@ -104,37 +104,38 @@ Especificaremos las características del módulo que queremos crear en Odoo en e
 ```env
 # -*- coding: utf-8 -*-
 {
+    'name': "second_proyect_sxe",
 
-    'name': "firstProyectSXE",
-    'summary': "Módulo para ver que alumno esta mas dormido 0",
+    'summary': "Modulo que permite ver el signo del horoscopo chino ",
 
-    'description': """ 
-    Un grupo de alumnos del Daniel Castelao, se están acostando tarde porque
-    estudian mucho y pican mucho código en casa. En ocasiones, a la mañana
-    siguiente en el centro, tienen sueño en clase, pero no tienen claro por qué opción
-    decantarse de entre las maravillosas ofertas de los establecimientos que rodean el
-    centro. Como tienen dudas de qué escoger, un compañero decide realizar un
-    módulo sencillo que establece la bebida que deben tomar en función del nivel de
-    sueño que tengan.
-    Para evitar que tus compañeros se duerman en clase, debes desarrollar un módulo
-    en Odoo que asigne la bebida adecuada según el sueño de cada usuario.""",
+    'description': """
+        Este modulo extiende el modelo res_parter añadiendo los siguientes 3 campos a contactos:
+         Fecha de nacimiento
+         Edad (Calculada automaticamente)
+         Signo del horoscopo chino (calculado automaticamente)
+    """,
 
-    'author': "Samuel Hermida Gregores",
-    'website': "https://www.algo.org",
+    'author': "Alumno esclavista",
+    'website': "https://www.noleolosuficientecomoparaquejarme.com",
 
+    # Categories can be used to filter modules in modules listing
+    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
+    # for the full list
     'category': 'Uncategorized',
     'version': '0.1',
 
-    'depends': ['base'],
+    # any module necessary for this one to work correctly
+    'depends': ['base','contacts'],
 
+    # always loaded
     'data': [
-        'security/ir.model.access.csv',
+        # 'security/ir.model.access.csv',
         'views/views.xml',
-        'views/templates.xml'
+        'views/templates.xml',
     ],
-
-    'demo':[
-        'demo/demo.xml'
+    # only loaded in demonstration mode
+    'demo': [
+        'demo/demo.xml',
     ],
 }
 ```
@@ -155,13 +156,16 @@ Especificaremos las características del módulo que queremos crear en Odoo en e
 
 ![img_2.png](ImagenesReadme/img_2.png)
 
+#### Activamos la app contactos para a posterior
+
+![img_6.png](ImagenesReadme/img_6.png)
+
 #### 🔍 Activar modo desarrollador y buscar el módulo
 
 ![img_3.png](ImagenesReadme/img_3.png)
 
 #### 📥 Instalar el módulo
 
-![img4.png](ImagenesReadme/img4.png)
 
 ---
 
@@ -169,24 +173,32 @@ Especificaremos las características del módulo que queremos crear en Odoo en e
 
 > Tan pronto se realiza la instalación, automáticamente ya te entra tu aplicación.
 
-![img_1.png](ImagenesReadme/img_43.png)
 
 ---
 
+### Paso 3: PgAdmin
+
+#### Iniciamos sesion
+
+![img_4.png](ImagenesReadme/img_4.png)
+
+#### Conectamos nuestro odoo
+
+![img_5.png](ImagenesReadme/img_5.png)
+
+---
+
+![img.png](ImagenesReadme/453.png)
+
 ### ➕ Crear una nueva anotación
 
-Probamos a crear una nueva anotación con su respectiva etiqueta y sus valores.
 
-![img.png](ImagenesReadme/imgr.png)  
-![img.png](ImagenesReadme/img31.png)
 
 ---
 
 ### 📝 ¿Qué haremos después de instalar nuestro módulo?
 
-Pues le daremos los valores que requiere el enunciado.
 
-![alt text](ImagenesReadme/image.png)
 
 > *A partir de aquí son cookeadas a parte*
 
@@ -194,19 +206,12 @@ Pues le daremos los valores que requiere el enunciado.
 
 ### 🔍 ¿Quieres filtrarlos?
 
-¡Pam! Aquí lo tienes:
 
-![img_1.png](ImagenesReadme/imgsfg.png)
 
 ---
 
 ### ⭐ ¿Eso no te sirve y también le quieres dar a favoritos?
 
-**¡Pim Pam! Toma Lacasitos! Ahí lo tienes.**
-
-![img.png](ImagenesReadme/asddas.png)
-
-> *Con este tuneillo que le metemos también la hora a la que se inscribió y un par de ejemplos*
 
 ---
 
