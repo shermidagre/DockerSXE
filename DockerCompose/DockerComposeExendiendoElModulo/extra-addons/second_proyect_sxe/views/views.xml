@@ -26,6 +26,7 @@
             <field name="signo_chino" string = "Signo del horoscopo chino"/>
         </xpath>
       </field>
+
     </record>
     <record id="partner_view_kanban_chinese_zodiac" model="ir.ui.view">
       <field name="name">partner_chinese_stats_kanban</field>
@@ -34,6 +35,47 @@
       <field name="arch" type="xml">
         <xpath expr="//field[@name='display_name']" position="after">
             <field name="signo_chino"/>
+        </xpath>
+      </field>
+    </record>
+    <record id="partner_view_form_loyalty_tab" model="ir.ui.view">
+      <field name="name">res.partner.loyalty.form</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//notebook" position="inside">
+            <page string="Membresía">
+                <group>
+                    <field name="codigo_socio"/>
+                    <field name="nivel_fidelidad"/>
+                </group>
+            </page>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="partner_view_tree_loyalty" model="ir.ui.view">
+      <field name="name">partner.loyalty.tree</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_tree"/>
+      <field name="arch" type="xml">
+        <field name="display_name" position="after">
+            <field name="nivel_fidelidad"
+                   decoration-info="nivel_fidelidad in ('premium', 'gold')"
+                   widget="badge"/>
+        </field>
+      </field>
+    </record>
+    <record id="partner_view_kanban_loyalty" model="ir.ui.view">
+      <field name="name">partner.loyalty.kanban</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='display_name']" position="after">
+            <div t-if="record.codigo_socio.raw_value" class="o_kanban_record_subtitle">
+                <strong class="text-secondary">Socio: </strong>
+                <field name="codigo_socio"/>
+            </div>
         </xpath>
       </field>
     </record>
