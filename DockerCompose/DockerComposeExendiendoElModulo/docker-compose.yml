@@ -1,0 +1,44 @@
+services:
+  web:
+    image: odoo:18.0
+    container_name: "odoo"
+    depends_on:
+      - mydb
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=mydb
+      - USER=odoo
+      - PASSWORD=myodoo
+    volumes:
+      - odoo:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./extra-addons:/mnt/extra-addons
+
+  mydb:
+    image: postgres:15
+    container_name: "postgres"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=myodoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - db_odoo:/var/lib/postgresql/data
+
+  pgAdmin:
+    image: dpage/pgadmin4
+    container_name: "pgAdmin"
+    depends_on:
+      - mydb
+    ports:
+      - "8081:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=shermidagre@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=sxe_password_example
+    volumes:
+      - dbadmin_data:/var/lib/pgadmin
+
+volumes:
+  db_odoo:
+  odoo:
+  dbadmin_data:
