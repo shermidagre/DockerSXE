@@ -1,3 +1,4 @@
+
 ---
 
 # 📄 Guía de Importación de un nuevo módulo en Odoo
