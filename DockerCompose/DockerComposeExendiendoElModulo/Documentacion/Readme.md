@@ -1,3 +1,4 @@
+
 ---
 
 # 📄 Guía de Importación de un nuevo módulo en Odoo
@@ -11,7 +12,7 @@
 
 Primero crearemos nuestra estructura del proyecto **sin datos**, para a posteriori establecer lo necesario.
 
-![img.png](ImagenesReadme/img.png)
+![img.png](ImagenesReadme/34242.png)
 
 ---
 
