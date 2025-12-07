@@ -1,4 +1,3 @@
-
 ---
 
 # 📄 Guía de Importación de un nuevo módulo en Odoo
@@ -146,16 +145,15 @@ Especificaremos las características del módulo que queremos crear en Odoo en e
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-import datetime
+from datetime import date
 
 class second_proyect_sxe(models.Model):
-
     _inherit = 'res.partner'
 
     f_nac = fields.Date("Fecha de nacimiento")
 
-    edad = fields.Integer(string = "Edad", readonly = True, compute = "_calcular_edad_china", store = True)
-    signo_chino = fields.Char(string = "Signo Chino", readonly = True, compute = "_calcular_chinada", store = True)
+    edad = fields.Integer(string="Edad", readonly=True, compute="_calcular_edad_china", store=True)
+    signo_chino = fields.Char(string="Signo Chino", readonly=True, compute="_calcular_chinada", store=True)
 
     codigo_socio = fields.Char(string="Código de Socio")
 
@@ -174,36 +172,105 @@ class second_proyect_sxe(models.Model):
     @api.depends('f_nac')
     def _calcular_edad_china(self):
         for record in self:
-            today = datetime.date.today()
             if record.f_nac:
-                age = today.year - record.f_nac.year
+                today = date.today()
+                # Fórmula precisa para edad teniendo en cuenta si ya cumplió años o no
+                age = today.year - record.f_nac.year - ((today.month, today.day) < (record.f_nac.month, record.f_nac.day))
                 record.edad = age
             else:
                 record.edad = 0
 
     @api.depends('f_nac')
     def _calcular_chinada(self):
+        # Lista ordenada según el resto de dividir año / 12
+        zodiacos = ['Mono', 'Gallo', 'Perro', 'Cerdo', 'Rata', 'Buey', 'Tigre', 'Conejo', 'Dragón', 'Serpiente', 'Caballo', 'Cabra']
         for record in self:
             if record.f_nac:
-                record.signo_chino = "Calculado"
+                indice = record.f_nac.year % 12
+                record.signo_chino = zodiacos[indice]
             else:
-                record.signo_chino = "Sin calcular"
+                record.signo_chino = "Desconocido"
 
     @api.depends('codigo_socio')
     def _compute_nivel_fidelidad(self):
         for record in self:
             if not record.codigo_socio:
-                # Si el código está vacío
                 record.nivel_fidelidad = 'estandar'
             elif record.codigo_socio.upper().startswith('G'):
-                # Si el código empieza por "G"
                 record.nivel_fidelidad = 'gold'
             else:
-                # Si el código tiene valor y no empieza por "G"
                 record.nivel_fidelidad = 'premium'
 
 ```
 
+### 📦 Archivo `views.xml` (views)
+
+```env
+<odoo>
+    <data>
+
+        <record id="view_partner_form_sxe_extensions" model="ir.ui.view">
+            <field name="name">res.partner.form.sxe.extensions</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Signo Chino">
+                        <group>
+                            <field name="f_nac"/>
+                            <field name="edad"/>
+                            <field name="signo_chino"/>
+                        </group>
+                    </page>
+                    <page string="Membresía">
+                        <group>
+                            <field name="codigo_socio" placeholder="Ej: G-1234"/>
+                            <field name="nivel_fidelidad"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_tree_sxe_extensions" model="ir.ui.view">
+            <field name="name">res.partner.tree.sxe.extensions</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="complete_name" position="after">
+                    <field name="signo_chino" optional="show"/>
+                    <field name="nivel_fidelidad"
+                           widget="badge"
+                           decoration-info="nivel_fidelidad in ('premium', 'gold')"
+                           decoration-muted="nivel_fidelidad == 'estandar'"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_kanban_sxe_extensions" model="ir.ui.view">
+            <field name="name">res.partner.kanban.sxe.extensions</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='display_name']" position="after">
+
+                    <div t-if="record.signo_chino.raw_value">
+                        <span class="text-muted">Horóscopo: </span>
+                        <field name="signo_chino"/>
+                    </div>
+
+                    <div t-if="record.codigo_socio.raw_value">
+                        <span class="text-muted">Socio: </span>
+                        <strong><field name="codigo_socio"/></strong>
+                    </div>
+
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+```
 
 ---
 
@@ -240,13 +307,9 @@ class second_proyect_sxe(models.Model):
 
 ![img_6.png](ImagenesReadme/img_6.png)
 
-#### 🔍 Activar modo desarrollador y buscar el módulo
-
-![img_3.png](ImagenesReadme/img_3.png)
-
 #### 📥 Instalar el módulo y comprobar res_parter
 
-[![Miniatura del video](https://img.youtube.com/vi/6txDqTKZQIY/0.jpg)](https://youtu.be/6txDqTKZQIY)
+[![Miniatura del video](https://img.youtube.com/vi/p2IjtaCv_sE/0.jpg)](https://youtu.be/p2IjtaCv_sE)
 
 > 💡 Haz clic en la imagen para abrir el tutorial en YouTube.
 
@@ -254,22 +317,68 @@ class second_proyect_sxe(models.Model):
 
 ### 🎉 ¡Módulo instalado!
 
-> Tan pronto se realiza la instalación, automáticamente ya te entra tu aplicación.
+> Tan pronto se realiza la instalación debe entrar a contactos y a partir de ahi ir probando cosillas.
 
 ---
 
-### ➕ Crear una nueva anotación
+### 📝 Manual de uso
 
+####  ¿Qué haremos después de instalar nuestro módulo?
 
----
+#### 1\. Gestión de Datos Demográficos (Zodiaco)
 
-### 📝 ¿Qué haremos después de instalar nuestro módulo?
+Para calcular la edad y el signo chino de un contacto:
 
+1.  Navega a la aplicación **Contactos**.
+2.  Abre un contacto existente o crea uno nuevo.
+3.  Busca la pestaña **"Signo Chino"** dentro del formulario.
+4.  Establece la **Fecha de nacimiento**.
+5.  **Resultado:** Los campos *Edad* y *Signo del horóscopo chino* se calcularán automáticamente al guardar o cambiar la fecha.
 
+> **Nota:** Si la fecha se deja vacía, la edad será 0 y el signo aparecerá como "Desconocido".
 
-> *A partir de aquí son cookeadas a parte*
+### 2\. Gestión de Fidelización (Membresía)
 
----
+El nivel de fidelidad se asigna automáticamente según el código introducido:
+
+1.  Dentro del contacto, ve a la pestaña **"Membresía"**.
+2.  Introduce un valor en el campo **Código de Socio**:
+    * **Caso A (Nivel Estándar):** Deja el campo vacío.
+    * **Caso B (Nivel Premium):** Escribe cualquier código (ej: `VIP-100`, `SOCIO-555`).
+    * **Caso C (Nivel Gold):** Escribe un código que empiece por **"G"** (mayúscula o minúscula). Ej: `G-2025`, `gold-user`.
+3.  El campo **Nivel de Fidelidad** cambiará automáticamente (es de solo lectura).
+
+-----
+
+## 👁️ Guía Visual de Vistas
+
+El módulo modifica las vistas principales para facilitar la identificación rápida de los socios VIP.
+
+### Vista de Lista (Tree)
+
+En el listado general de contactos, verás dos nuevas columnas al final:
+
+* **Signo Chino:** (Opcional, puede ocultarse).
+* **Nivel de Fidelidad:** Se muestra como una etiqueta (**Badge**).
+    * Si es *Premium* o *Gold*, la etiqueta aparecerá resaltada en color **Azul Claro**.
+    * Si es *Estándar*, aparecerá en color gris.
+
+### Vista Kanban (Tarjetas)
+
+En la vista de tarjetas, se ha añadido información extra debajo del nombre del contacto:
+
+1.  **Horóscopo:** Muestra el animal del zodiaco (si tiene fecha de nacimiento).
+2.  **Socio:** Muestra el Código de Socio en **Negrita** para destacar a los miembros del club.
+
+-----
+
+## 🛠️ Estructura del Proyecto
+
+* `models/models.py`: Contiene la lógica Python (`_calcular_edad_china`, `_compute_nivel_fidelidad`).
+* `views/views.xml`: Define las pestañas nuevas en el Formulario, las columnas en el Tree y los campos en el Kanban.
+* `__manifest__.py`: Archivo de configuración y dependencias del módulo.
+
+-----
 
 ## 🔗 Enlaces Útiles (v18)
 
