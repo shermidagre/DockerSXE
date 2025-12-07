@@ -150,33 +150,7 @@ Especificaremos las características del módulo que queremos crear en Odoo en e
 
 ---
 
-### Paso 2: Buscar y activar el módulo
-
-#### 🔐 Iniciar sesión
-
-![img_2.png](ImagenesReadme/img_2.png)
-
-#### Activamos la app contactos para a posterior
-
-![img_6.png](ImagenesReadme/img_6.png)
-
-#### 🔍 Activar modo desarrollador y buscar el módulo
-
-![img_3.png](ImagenesReadme/img_3.png)
-
-#### 📥 Instalar el módulo
-
-
----
-
-### 🎉 ¡Módulo instalado!
-
-> Tan pronto se realiza la instalación, automáticamente ya te entra tu aplicación.
-
-
----
-
-### Paso 3: PgAdmin
+### Paso 2: PgAdmin
 
 #### Iniciamos sesion
 
@@ -190,8 +164,36 @@ Especificaremos las características del módulo que queremos crear en Odoo en e
 
 ![img.png](ImagenesReadme/453.png)
 
-### ➕ Crear una nueva anotación
 
+### Paso 3: Buscar y activar el módulo
+
+#### 🔐 Iniciar sesión
+
+![img_2.png](ImagenesReadme/img_2.png)
+
+#### Activamos la app contactos para a posterior
+
+![img_6.png](ImagenesReadme/img_6.png)
+
+#### 🔍 Activar modo desarrollador y buscar el módulo
+
+![img_3.png](ImagenesReadme/img_3.png)
+
+#### 📥 Instalar el módulo y comprobar res_parter
+
+[![Miniatura del video](https://img.youtube.com/vi/6txDqTKZQIY/0.jpg)](https://youtu.be/6txDqTKZQIY)
+
+> 💡 Haz clic en la imagen para abrir el tutorial en YouTube.
+
+---
+
+### 🎉 ¡Módulo instalado!
+
+> Tan pronto se realiza la instalación, automáticamente ya te entra tu aplicación.
+
+---
+
+### ➕ Crear una nueva anotación
 
 
 ---
@@ -201,17 +203,6 @@ Especificaremos las características del módulo que queremos crear en Odoo en e
 
 
 > *A partir de aquí son cookeadas a parte*
-
----
-
-### 🔍 ¿Quieres filtrarlos?
-
-
-
----
-
-### ⭐ ¿Eso no te sirve y también le quieres dar a favoritos?
-
 
 ---
 
