@@ -1,30 +1,27 @@
 <odoo>
     <data>
-<!--
-          <record id="object0" model="gestion_clases.gestion_clases">
-            <field name="name">Object 0</field>
-            <field name="value">0</field>
-          </record>
+        <record id="profesor_diego" model="gestion_clases.profesor">
+            <field name="nombre">Diego Alonso</field>
+            <field name="telefono">666666666</field>
+            <field name="direccion">García Barbón 25</field>
+            <field name="cursos">basico_medio_superior</field>
+            <field name="horas_mensuales">23</field>
+        </record>
 
-          <record id="object1" model="gestion_clases.gestion_clases">
-            <field name="name">Object 1</field>
-            <field name="value">10</field>
-          </record>
+        <record id="profesor_damian" model="gestion_clases.profesor">
+            <field name="nombre">Damian Nogueiras</field>
+            <field name="telefono">777777777</field>
+            <field name="direccion">Policarpo Sanz 13</field>
+            <field name="cursos">solo_superior</field>
+            <field name="horas_mensuales">21</field>
+        </record>
 
-          <record id="object2" model="gestion_clases.gestion_clases">
-            <field name="name">Object 2</field>
-            <field name="value">20</field>
-          </record>
-
-          <record id="object3" model="gestion_clases.gestion_clases">
-            <field name="name">Object 3</field>
-            <field name="value">30</field>
-          </record>
-
-          <record id="object4" model="gestion_clases.gestion_clases">
-            <field name="name">Object 4</field>
-            <field name="value">40</field>
-          </record>
--->
+        <record id="profesor_manuel" model="gestion_clases.profesor">
+            <field name="nombre">Manuel Araujo</field>
+            <field name="telefono">888888888</field>
+            <field name="direccion">Avda. Gran Vía 80</field>
+            <field name="cursos">medio_superior</field>
+            <field name="horas_mensuales">19</field>
+        </record>
     </data>
 </odoo>

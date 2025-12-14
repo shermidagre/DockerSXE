@@ -109,171 +109,189 @@ Especificaremos las características del módulo que queremos crear en Odoo en e
 ```env
 # -*- coding: utf-8 -*-
 {
-    'name': "second_proyect_sxe",
+    'name': "Gestión de Clases",
 
-    'summary': "Modulo que permite ver el signo del horoscopo chino ",
+    'summary': "Gestión de Profesores y Tipos de Cursos",
 
     'description': """
-        Este modulo extiende el modelo res_parter añadiendo los siguientes 3 campos a contactos:
-         Fecha de nacimiento
-         Edad (Calculada automaticamente)
-         Signo del horoscopo chino (calculado automaticamente)
+Permite la gestión de profesores, sus datos de contacto y la asignación a tipos de cursos (Básico, Medio, Superior).
     """,
 
-    'author': "Alumno esclavista",
-    'website': "https://www.noleolosuficientecomoparaquejarme.com",
+    'author': "My Company",
+    'website': "https://www.yourcompany.com",
 
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
     'category': 'Uncategorized',
     'version': '0.1',
 
-    # any module necessary for this one to work correctly
-    'depends': ['base','contacts'],
+    'depends': ['base'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        "security/ir.model.access.csv",
+        "views/profesor_views.xml",
+        "views/menu.xml",
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
 }
+
+
 ```
-### 📦 Archivo `models.py` (Models)
+### 📦 Archivo `profesor.py` (Models)
 
 ```env
 
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-from datetime import date
 
-class second_proyect_sxe(models.Model):
-    _inherit = 'res.partner'
+class Profesor(models.Model):
+    _name = "gestion_clases.profesor"
+    _description = "Profesor"
+    _order = "nombre asc" # Cambio de 'name' a 'nombre'
 
-    f_nac = fields.Date("Fecha de nacimiento")
+    nombre = fields.Char(string="Nombre", required=True)
+    telefono = fields.Char(string="Teléfono", required=True)
+    direccion = fields.Text(string="Dirección")
 
-    edad = fields.Integer(string="Edad", readonly=True, compute="_calcular_edad_china", store=True)
-    signo_chino = fields.Char(string="Signo Chino", readonly=True, compute="_calcular_chinada", store=True)
-
-    codigo_socio = fields.Char(string="Código de Socio")
-
-    nivel_fidelidad = fields.Selection(
+    cursos = fields.Selection(
         [
-            ('estandar', 'Estándar'),
-            ('premium', 'Premium'),
-            ('gold', 'Gold')
+            ("basico_medio_superior", "Básico, Medio y Superior"),
+            ("solo_superior", "Solo Superior"),
+            ("medio_superior", "Medio y Superior"),
         ],
-        string="Nivel de Fidelidad",
-        compute="_compute_nivel_fidelidad",
-        store=True,
-        default='estandar'
+        string="Tipos de Cursos",
+        required=True,
+        default="basico_medio_superior",
     )
 
-    @api.depends('f_nac')
-    def _calcular_edad_china(self):
-        for record in self:
-            if record.f_nac:
-                today = date.today()
-                # Fórmula precisa para edad teniendo en cuenta si ya cumplió años o no
-                age = today.year - record.f_nac.year - ((today.month, today.day) < (record.f_nac.month, record.f_nac.day))
-                record.edad = age
-            else:
-                record.edad = 0
+    horas_mensuales = fields.Integer(string="Horas Mensuales de Clase")
 
-    @api.depends('f_nac')
-    def _calcular_chinada(self):
-        # Lista ordenada según el resto de dividir año / 12
-        zodiacos = ['Mono', 'Gallo', 'Perro', 'Cerdo', 'Rata', 'Buey', 'Tigre', 'Conejo', 'Dragón', 'Serpiente', 'Caballo', 'Cabra']
-        for record in self:
-            if record.f_nac:
-                indice = record.f_nac.year % 12
-                record.signo_chino = zodiacos[indice]
-            else:
-                record.signo_chino = "Desconocido"
+    # Campo calculado para Horas Anuales
+    horas_anuales = fields.Integer(
+        string="Horas Anuales de Clase",
+        compute="_calcular_horas_anuales",
+        store=True,
+    )
 
-    @api.depends('codigo_socio')
-    def _compute_nivel_fidelidad(self):
+    # Método para calcular las horas anuales
+    @api.depends('horas_mensuales')
+    def _calcular_horas_anuales(self):
         for record in self:
-            if not record.codigo_socio:
-                record.nivel_fidelidad = 'estandar'
-            elif record.codigo_socio.upper().startswith('G'):
-                record.nivel_fidelidad = 'gold'
-            else:
-                record.nivel_fidelidad = 'premium'
+            # Multiplicamos por 10 asumiendo 10 meses de clase
+            record.horas_anuales = record.horas_mensuales * 10
 
 ```
 
-### 📦 Archivo `views.xml` (views)
+### 📦 Archivo `profesor_views.xml` (views)
 
 ```env
 <odoo>
     <data>
-
-        <record id="view_partner_form_sxe_extensions" model="ir.ui.view">
-            <field name="name">res.partner.form.sxe.extensions</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
+        <record id="vista_profesor_form" model="ir.ui.view">
+            <field name="name">gestion_clases.profesor.form</field>
+            <field name="model">gestion_clases.profesor</field>
             <field name="arch" type="xml">
-                <xpath expr="//notebook" position="inside">
-                    <page string="Signo Chino">
+                <form string="Información del Profesor">
+                    <sheet>
                         <group>
-                            <field name="f_nac"/>
-                            <field name="edad"/>
-                            <field name="signo_chino"/>
+                            <field name="nombre"/>
+                            <field name="telefono"/>
+                            <field name="cursos"/>
                         </group>
-                    </page>
-                    <page string="Membresía">
                         <group>
-                            <field name="codigo_socio" placeholder="Ej: G-1234"/>
-                            <field name="nivel_fidelidad"/>
+                            <field name="horas_mensuales"/>
+                            <field name="horas_anuales"/>
                         </group>
-                    </page>
-                </xpath>
+                        <group>
+                            <field name="direccion"/>
+                        </group>
+                    </sheet>
+                </form>
             </field>
         </record>
 
-        <record id="view_partner_tree_sxe_extensions" model="ir.ui.view">
-            <field name="name">res.partner.tree.sxe.extensions</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_tree"/>
+        <record id="vista_profesor_lista" model="ir.ui.view">
+            <field name="name">gestion_clases.profesor.list</field>
+            <field name="model">gestion_clases.profesor</field>
             <field name="arch" type="xml">
-                <field name="complete_name" position="after">
-                    <field name="signo_chino" optional="show"/>
-                    <field name="nivel_fidelidad"
-                           widget="badge"
-                           decoration-info="nivel_fidelidad in ('premium', 'gold')"
-                           decoration-muted="nivel_fidelidad == 'estandar'"/>
-                </field>
+                <list>
+                    <field name="nombre"/>
+                    <field name="telefono"/>
+                    <field name="cursos"/>
+                    <field name="horas_mensuales"/>
+                    <field name="horas_anuales"/>
+                </list>
             </field>
         </record>
 
-        <record id="view_partner_kanban_sxe_extensions" model="ir.ui.view">
-            <field name="name">res.partner.kanban.sxe.extensions</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <record id="vista_profesor_kanban" model="ir.ui.view">
+            <field name="name">gestion_clases.profesor.kanban</field>
+            <field name="model">gestion_clases.profesor</field>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='display_name']" position="after">
-
-                    <div t-if="record.signo_chino.raw_value">
-                        <span class="text-muted">Horóscopo: </span>
-                        <field name="signo_chino"/>
-                    </div>
-
-                    <div t-if="record.codigo_socio.raw_value">
-                        <span class="text-muted">Socio: </span>
-                        <strong><field name="codigo_socio"/></strong>
-                    </div>
-
-                </xpath>
+                <kanban>
+                    <field name="nombre"/>
+                    <field name="telefono"/>
+                    <field name="horas_mensuales"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img alt="Profesor" t-att-src="kanban_image('gestion_clases.profesor', 'image_128', record.id)" class="oe_kanban_avatar"/>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong><field name="nombre"/></strong>
+                                    <ul>
+                                        <li t-if="record.telefono.raw_value">Teléfono: <field name="telefono"/></li>
+                                        <li>Horas/Mes: <field name="horas_mensuales"/></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
             </field>
         </record>
 
+        <record id="accion_profesor" model="ir.actions.act_window">
+            <field name="name">Profesores</field>
+            <field name="res_model">gestion_clases.profesor</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+    </data>
+</odoo>
+```
+
+### 📦 Archivo `demo.xml` (demo)
+
+```env
+<odoo>
+    <data>
+        <record id="profesor_diego" model="gestion_clases.profesor">
+            <field name="nombre">Diego Alonso</field>
+            <field name="telefono">666666666</field>
+            <field name="direccion">García Barbón 25</field>
+            <field name="cursos">basico_medio_superior</field>
+            <field name="horas_mensuales">23</field>
+        </record>
+
+        <record id="profesor_damian" model="gestion_clases.profesor">
+            <field name="nombre">Damian Nogueiras</field>
+            <field name="telefono">777777777</field>
+            <field name="direccion">Policarpo Sanz 13</field>
+            <field name="cursos">solo_superior</field>
+            <field name="horas_mensuales">21</field>
+        </record>
+
+        <record id="profesor_manuel" model="gestion_clases.profesor">
+            <field name="nombre">Manuel Araujo</field>
+            <field name="telefono">888888888</field>
+            <field name="direccion">Avda. Gran Vía 80</field>
+            <field name="cursos">medio_superior</field>
+            <field name="horas_mensuales">19</field>
+        </record>
     </data>
 </odoo>
 ```
@@ -309,16 +327,16 @@ class second_proyect_sxe(models.Model):
 
 ![img_2.png](ImagenesReadme/img_2.png)
 
-#### Activamos la app contactos para a posterior
-
-![img_6.png](ImagenesReadme/img_6.png)
 
 #### 📥 Instalar el módulo y comprobar res_parter
 
-[![Miniatura del video](https://img.youtube.com/vi/p2IjtaCv_sE/0.jpg)](https://youtu.be/p2IjtaCv_sE)
+[![Miniatura del video](https://img.youtube.com/vi/L3bb4TMk_Mw/0.jpg)](https://youtu.be/L3bb4TMk_Mw)
 
 > 💡 Haz clic en la imagen para abrir el tutorial en YouTube.
 
+#### En caso de que inicialices la bd de odoo con la opción de carga de datos de demostración, cuando instales el módulo verás los datos de demostración que hemos creado.
+
+![img.png](ImagenesReadme/1445235.png)
 ---
 
 ### 🎉 ¡Módulo instalado!
@@ -327,64 +345,79 @@ class second_proyect_sxe(models.Model):
 
 ---
 
-### 📝 Manual de uso
+Entendido. Basándome en la estructura y funcionalidad del módulo `gestion_clases.profesor` que hemos desarrollado, aquí tienes un archivo `README.md` (Manual de uso y referencia) con un formato similar al que proporcionaste.
 
-####  ¿Qué haremos después de instalar nuestro módulo?
+---
 
-#### 1\. Gestión de Datos Demográficos (Zodiaco)
+# 📝 Manual de Uso del Módulo: Gestión de Clases
 
-Para calcular la edad y el signo chino de un contacto:
+Este módulo permite la gestión de profesores, sus datos de contacto y la asignación a tipos de cursos, calculando automáticamente sus horas lectivas anuales.
 
-1.  Navega a la aplicación **Contactos**.
-2.  Abre un contacto existente o crea uno nuevo.
-3.  Busca la pestaña **"Signo Chino"** dentro del formulario.
-4.  Establece la **Fecha de nacimiento**.
-5.  **Resultado:** Los campos *Edad* y *Signo del horóscopo chino* se calcularán automáticamente al guardar o cambiar la fecha.
+#### ¿Qué haremos después de instalar nuestro módulo?
 
-> **Nota:** Si la fecha se deja vacía, la edad será 0 y el signo aparecerá como "Desconocido".
+### 1. Gestión del Profesor (Datos Demográficos)
 
-### 2\. Gestión de Fidelización (Membresía)
+Para gestionar la información de contacto y carga lectiva de un profesor:
 
-El nivel de fidelidad se asigna automáticamente según el código introducido:
+1.  Navega a la aplicación **Gestión de Clases**.
+2.  Haz clic en el submenú **"Profesores"**.
+3.  Abre un registro de profesor existente o crea uno nuevo con el botón "Nuevo".
+4.  Establece el **Nombre**, **Teléfono** y el **Tipo de Cursos** que imparte.
+5.  Introduce la cantidad de **Horas Mensuales de Clase** (ej: `23`).
+6.  **Resultado:** El campo *Horas Anuales de Clase* se calculará automáticamente al guardar o cambiar las horas mensuales, asumiendo 10 meses lectivos al año.
 
-1.  Dentro del contacto, ve a la pestaña **"Membresía"**.
-2.  Introduce un valor en el campo **Código de Socio**:
-    * **Caso A (Nivel Estándar):** Deja el campo vacío.
-    * **Caso B (Nivel Premium):** Escribe cualquier código (ej: `VIP-100`, `SOCIO-555`).
-    * **Caso C (Nivel Gold):** Escribe un código que empiece por **"G"** (mayúscula o minúscula). Ej: `G-2025`, `gold-user`.
-3.  El campo **Nivel de Fidelidad** cambiará automáticamente (es de solo lectura).
+> **Nota:** La fórmula de cálculo automático es: $\text{Horas Anuales} = \text{Horas Mensuales} \times 10$.
 
------
+### 2. Clasificación de Cursos (Selección)
+
+El campo **Tipos de Cursos** permite clasificar rápidamente la experiencia del profesor:
+
+| Opción | Clave interna | Descripción |
+| :--- | :--- | :--- |
+| **Básico, Medio y Superior** | `basico_medio_superior` | Imparte todos los niveles. |
+| **Solo Superior** | `solo_superior` | Solo imparte el nivel más avanzado. |
+| **Medio y Superior** | `medio_superior` | Imparte los dos niveles superiores. |
+
+---
 
 ## 👁️ Guía Visual de Vistas
 
-El módulo modifica las vistas principales para facilitar la identificación rápida de los socios VIP.
+El módulo proporciona varias vistas para manejar la información del profesor de manera eficiente.
 
 ### Vista de Lista (Tree)
 
-En el listado general de contactos, verás dos nuevas columnas al final:
+En el listado general de profesores, verás las siguientes columnas para una referencia rápida:
 
-* **Signo Chino:** (Opcional, puede ocultarse).
-* **Nivel de Fidelidad:** Se muestra como una etiqueta (**Badge**).
-    * Si es *Premium* o *Gold*, la etiqueta aparecerá resaltada en color **Azul Claro**.
-    * Si es *Estándar*, aparecerá en color gris.
+* **Nombre**
+* **Teléfono**
+* **Tipos de Cursos**
+* **Horas Mensuales de Clase**
+* **Horas Anuales de Clase** (Calculada)
 
 ### Vista Kanban (Tarjetas)
 
-En la vista de tarjetas, se ha añadido información extra debajo del nombre del contacto:
+En la vista de tarjetas (predeterminada), se ha añadido información clave visible debajo del nombre del profesor:
 
-1.  **Horóscopo:** Muestra el animal del zodiaco (si tiene fecha de nacimiento).
-2.  **Socio:** Muestra el Código de Socio en **Negrita** para destacar a los miembros del club.
+1.  **Teléfono:** Muestra el número de contacto.
+2.  **Horas/Mes:** Muestra la carga lectiva mensual para planificación rápida.
+3.  **Nombre del Profesor** (en negrita)
 
------
+### Vista de Formulario
 
-## 🛠️ Estructura del Proyecto
+Muestra todos los campos del modelo: Nombre, Teléfono, Dirección, Tipos de Cursos, Horas Mensuales y el campo calculado de Horas Anuales.
 
-* `models/models.py`: Contiene la lógica Python (`_calcular_edad_china`, `_compute_nivel_fidelidad`).
-* `views/views.xml`: Define las pestañas nuevas en el Formulario, las columnas en el Tree y los campos en el Kanban.
-* `__manifest__.py`: Archivo de configuración y dependencias del módulo.
+---
 
------
+## 🛠️ Estructura del Proyecto (`gestion_clases`)
+
+| Archivo/Directorio | Propósito |
+| :--- | :--- |
+| `models/profesor.py` | Contiene la lógica Python del modelo `gestion_clases.profesor`, incluyendo el campo calculado `horas_anuales` mediante el método `_calcular_horas_anuales`. |
+| `views/profesor_views.xml` | Define las vistas de **Formulario**, **Lista (Tree)** y **Kanban**, y la **Acción de Ventana** (`accion_profesor`). |
+| `views/menu.xml` | Define el menú principal **"Gestión de Clases"** y el submenú **"Profesores"**. |
+| `demo/demo.xml` | Contiene los tres registros de demostración iniciales (`Diego Alonso`, `Damian Nogueiras`, `Manuel Araujo`). |
+| `security/ir.model.access.csv` | Define los permisos de lectura, escritura y creación para el modelo `gestion_clases.profesor`. |
+| `__manifest__.py` | Archivo de configuración, metadatos y dependencias del módulo. |
 
 ## 🔗 Enlaces Útiles (v18)
 

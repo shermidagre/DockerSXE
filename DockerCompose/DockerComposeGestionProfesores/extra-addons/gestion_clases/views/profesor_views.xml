@@ -1,0 +1,74 @@
+<odoo>
+    <data>
+        <record id="vista_profesor_form" model="ir.ui.view">
+            <field name="name">gestion_clases.profesor.form</field>
+            <field name="model">gestion_clases.profesor</field>
+            <field name="arch" type="xml">
+                <form string="Información del Profesor">
+                    <sheet>
+                        <group>
+                            <field name="nombre"/>
+                            <field name="telefono"/>
+                            <field name="cursos"/>
+                        </group>
+                        <group>
+                            <field name="horas_mensuales"/>
+                            <field name="horas_anuales"/>
+                        </group>
+                        <group>
+                            <field name="direccion"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="vista_profesor_lista" model="ir.ui.view">
+            <field name="name">gestion_clases.profesor.list</field>
+            <field name="model">gestion_clases.profesor</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="nombre"/>
+                    <field name="telefono"/>
+                    <field name="cursos"/>
+                    <field name="horas_mensuales"/>
+                    <field name="horas_anuales"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="vista_profesor_kanban" model="ir.ui.view">
+            <field name="name">gestion_clases.profesor.kanban</field>
+            <field name="model">gestion_clases.profesor</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="nombre"/>
+                    <field name="telefono"/>
+                    <field name="horas_mensuales"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img alt="Profesor" t-att-src="kanban_image('gestion_clases.profesor', 'image_128', record.id)" class="oe_kanban_avatar"/>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong><field name="nombre"/></strong>
+                                    <ul>
+                                        <li t-if="record.telefono.raw_value">Teléfono: <field name="telefono"/></li>
+                                        <li>Horas/Mes: <field name="horas_mensuales"/></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="accion_profesor" model="ir.actions.act_window">
+            <field name="name">Profesores</field>
+            <field name="res_model">gestion_clases.profesor</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+    </data>
+</odoo>

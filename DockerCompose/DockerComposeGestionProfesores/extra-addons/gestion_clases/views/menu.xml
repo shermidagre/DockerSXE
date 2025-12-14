@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <menuitem id="gestion_clases_menu" name="Gestión de Clases" sequence="10"/>
+
+        <menuitem id="menu_profesor"
+                  name="Profesores"
+                  parent="gestion_clases_menu"
+                  action="accion_profesor"
+                  sequence="1"/>
+    </data>
+</odoo>
