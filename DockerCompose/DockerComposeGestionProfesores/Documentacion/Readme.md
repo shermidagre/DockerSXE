@@ -47,6 +47,14 @@ Primero crearemos nuestra estructura del proyecto **sin datos**, para a posterio
 
 ---
 
+### 🗂️ Configuracion archivo `odoo.conf`
+
+```env
+[options]
+addons_path = /mnt/extra-addons
+data_dir = /var/lib/odoo
+admin_passwd = admin
+```
 ### 🐳 Configuración de `docker-compose.yaml`
 
 Teniendo ya este formato, crearemos nuestro archivo `docker-compose.yaml` para levantar nuestro servicio Odoo:
