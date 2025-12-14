@@ -88,7 +88,7 @@ services:
       - "8081:80"
     environment:
       - PGADMIN_DEFAULT_EMAIL=shermidagre@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=sxe_password_example
+      - PGADMIN_DEFAULT_PASSWORD=admin
     volumes:
       - dbadmin_data:/var/lib/pgadmin
 
