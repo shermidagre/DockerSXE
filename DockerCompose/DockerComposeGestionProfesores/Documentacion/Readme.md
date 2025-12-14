@@ -392,7 +392,7 @@ El campo **Tipos de Cursos** permite clasificar rápidamente la experiencia del 
 
 El módulo proporciona varias vistas para manejar la información del profesor de manera eficiente.
 
-### Vista de Lista (Tree)
+### Vista de Lista (List ya que en el 18 el tree no va)
 
 En el listado general de profesores, verás las siguientes columnas para una referencia rápida:
 
@@ -421,7 +421,7 @@ Muestra todos los campos del modelo: Nombre, Teléfono, Dirección, Tipos de Cur
 | Archivo/Directorio | Propósito |
 | :--- | :--- |
 | `models/profesor.py` | Contiene la lógica Python del modelo `gestion_clases.profesor`, incluyendo el campo calculado `horas_anuales` mediante el método `_calcular_horas_anuales`. |
-| `views/profesor_views.xml` | Define las vistas de **Formulario**, **Lista (Tree)** y **Kanban**, y la **Acción de Ventana** (`accion_profesor`). |
+| `views/profesor_views.xml` | Define las vistas de **Formulario**, **Lista** y **Kanban**, y la **Acción de Ventana** (`accion_profesor`). |
 | `views/menu.xml` | Define el menú principal **"Gestión de Clases"** y el submenú **"Profesores"**. |
 | `demo/demo.xml` | Contiene los tres registros de demostración iniciales (`Diego Alonso`, `Damian Nogueiras`, `Manuel Araujo`). |
 | `security/ir.model.access.csv` | Define los permisos de lectura, escritura y creación para el modelo `gestion_clases.profesor`. |
