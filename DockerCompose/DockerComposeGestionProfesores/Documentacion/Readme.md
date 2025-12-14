@@ -8,19 +8,16 @@
 
 ---
 
-## 🗂️ Paso 1: Estructura inicial del proyecto
-
-Primero crearemos nuestra estructura del proyecto **sin datos**, para a posteriori establecer lo necesario.
-
-![img.png](ImagenesReadme/34242.png)
-
----
-
 ### 🛠️ Creación del *scaffold* del módulo
 
 Se empezará creando el *scaffold* de nuestro proyecto mediante los siguientes comandos e instrucciones:
 
 ```dotenv
+
+Ejecutaremos primerameente nuestro contenedor de Odoo mediante docker-compose up 
+
+Comando --> docker-compose up 
+
 Se ejecutará el docker ps para identificar qué contenedores están activos actualmente y así poder entrar a la consola de nuestro contenedor Odoo.
 
 Comando --> docker ps 
@@ -39,6 +36,14 @@ Comando --> odoo scaffold <Nombre que le vayas a dar a tu proyecto> /mnt/extra-a
 #### 💡 Ejemplo de uso
 
 ![img8.png](ImagenesReadme/img8.png)
+
+---
+
+## 🗂️ Paso 1: Estructura inicial del proyecto
+
+Primero crearemos nuestra estructura del proyecto **sin datos**, para a posteriori establecer lo necesario.
+
+![img.png](ImagenesReadme/img.png)
 
 ---
 
