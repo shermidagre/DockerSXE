@@ -264,11 +264,11 @@ access_hospital_diagnostico_user,access_hospital_diagnostico_user,model_hospital
                     <notebook>
                         <page string="Médicos que lo han atendido">
                             <field name="medico_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="nombre"/>
                                     <field name="apellidos"/>
                                     <field name="consulta"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -277,22 +277,22 @@ access_hospital_diagnostico_user,access_hospital_diagnostico_user,model_hospital
         </field>
     </record>
 
-    <record id="view_hospital_paciente_tree" model="ir.ui.view">
-        <field name="name">hospital.paciente.tree</field>
+    <record id="view_hospital_paciente_list" model="ir.ui.view">
+        <field name="name">hospital.paciente.list</field>
         <field name="model">hospital.paciente</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="id_paciente"/>
                 <field name="nombre"/>
                 <field name="apellidos"/>
-            </tree>
+            </list>
         </field>
     </record>
 
     <record id="action_hospital_paciente" model="ir.actions.act_window">
         <field name="name">Pacientes</field>
         <field name="res_model">hospital.paciente</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>
 ```
@@ -321,11 +321,11 @@ access_hospital_diagnostico_user,access_hospital_diagnostico_user,model_hospital
                     <notebook>
                         <page string="Pacientes atendidos">
                             <field name="paciente_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="nombre"/>
                                     <field name="apellidos"/>
                                     <field name="sintomas"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -334,24 +334,24 @@ access_hospital_diagnostico_user,access_hospital_diagnostico_user,model_hospital
         </field>
     </record>
 
-    <record id="view_hospital_medico_tree" model="ir.ui.view">
+    <record id="view_hospital_medico_list" model="ir.ui.view">
         <field name="name">hospital.medico.tree</field>
         <field name="model">hospital.medico</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="id_medico"/>
                 <field name="nombre"/>
                 <field name="apellidos"/>
                 <field name="num_colegiado"/>
                 <field name="consulta"/>
-            </tree>
+            </list>
         </field>
     </record>
 
     <record id="action_hospital_medico" model="ir.actions.act_window">
         <field name="name">Médicos</field>
         <field name="res_model">hospital.medico</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>
 ```
@@ -379,22 +379,22 @@ access_hospital_diagnostico_user,access_hospital_diagnostico_user,model_hospital
         </field>
     </record>
 
-    <record id="view_hospital_diagnostico_tree" model="ir.ui.view">
-        <field name="name">hospital.diagnostico.tree</field>
+    <record id="view_hospital_diagnostico_list" model="ir.ui.view">
+        <field name="name">hospital.diagnostico.list</field>
         <field name="model">hospital.diagnostico</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="medico_id"/>
                 <field name="paciente_id"/>
                 <field name="consulta"/>
-            </tree>
+            </list>
         </field>
     </record>
 
     <record id="action_hospital_diagnostico" model="ir.actions.act_window">
         <field name="name">Diagnósticos</field>
         <field name="res_model">hospital.diagnostico</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>
 ```
@@ -417,18 +417,22 @@ access_hospital_diagnostico_user,access_hospital_diagnostico_user,model_hospital
 
 ## 🧪 Pruebas: Levantar y probar el módulo
 
-*(Sección reutilizada tal cual de tu plantilla original)*
 
 ### Paso 1: Crear base de datos  
 ![img_1.png](ImagenesReadme/img_1.png)
 
 ### Paso 2: PgAdmin  
+
 - Iniciar sesión  
-- Conectar con Odoo  
+
 ![img_4.png](ImagenesReadme/img_4.png)  
+
+- Conectar con Odoo
+
 ![img_5.png](ImagenesReadme/img_5.png)
 
 ### Paso 3: Buscar y activar el módulo  
+
 - Iniciar sesión en Odoo  
 - Instalar **modulo_medico_paciente**
 
