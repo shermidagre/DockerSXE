@@ -14,6 +14,7 @@ Primero crearemos nuestra estructura del proyecto **sin datos**, para a posterio
 
 ![img.png](ImagenesReadme/34242.png)
 
+// tengo que cambiar la imagen
 ---
 
 ### 🛠️ Creación del *scaffold* del módulo
@@ -71,7 +72,7 @@ services:
       - "8081:80"
     environment:
       - PGADMIN_DEFAULT_EMAIL=shermidagre@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=sxe_password_example
+      - PGADMIN_DEFAULT_PASSWORD=admin
     volumes:
       - dbadmin_data:/var/lib/pgadmin
 
@@ -81,7 +82,18 @@ volumes:
   dbadmin_data:
 ```
 
----
+--- 
+
+### 📦 Archivo `odoo.conf`
+
+```ini
+[options]
+addons_path = /mnt/extra-addons
+data_dir = /var/lib/odoo
+admin_passwd = admin
+```
+
+## 🗂️ Paso 2: Desarrollo del módulo
 
 ### 📦 Archivo `__manifest__.py`
 
@@ -120,6 +132,16 @@ volumes:
 
 #### Modulo para gestionar los pacientes y su relación con los médicos a través de diagnósticos.
 
+#### *Campos obligatorios*
+
+- ID Paciente
+- Nombre
+- Apellidos
+
+#### *Relacion 1 : N con Diagnosticos*
+#### *Relacion N : M con Medicos (mediante diagnosticos)*
+#### Por cada paciente, se mostrará una lista de los médicos que lo han atendido (nombre y consulta) gracias al mapped.
+
 ```python
 from odoo import models, fields
 
@@ -139,11 +161,25 @@ class Paciente(models.Model):
             paciente.medico_ids = paciente.diagnostico_ids.mapped('medico_id')
 ```
 
+
+
 ---
 
 ### 📦 Modelo `models/medico.py`
 
 #### Modulo para gestionar los médicos y su relación con los pacientes a través de diagnósticos.
+
+#### *Campos obligatorios*
+
+- ID Médico
+- Nombre
+- Apellidos
+- Nº Colegiado
+- Consulta
+
+#### *Relacion 1 : N con Diagnosticos*
+#### *Relacion N : M con Pacientes (mediante diagnosticos)*
+#### Por cada médico, se mostrará una lista de los pacientes que ha atendido (nombre y síntomas) gracias al mapped.
 
 ```python
 from odoo import models, fields
@@ -170,6 +206,13 @@ class Medico(models.Model):
 ### 📦 Modelo `models/diagnostico.py`
 
 #### Modulo intermedio para la relación muchos a muchos entre el medico y el paciente, para asi poder controlar los diagnosticos de los cuales se encargan los medicos a los pacientes.
+
+##### *Campos obligatorios*
+
+- Médico (Many2one a hospital.medico)
+- Paciente (Many2one a hospital.paciente)
+- Síntomas (campo calculado, relacionado con el paciente)
+- Consulta (campo calculado, relacionado con el médico)
 
 ```python
 from odoo import models, fields
