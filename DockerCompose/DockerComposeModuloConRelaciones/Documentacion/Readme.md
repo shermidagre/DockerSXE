@@ -18,20 +18,10 @@ Primero crearemos nuestra estructura del proyecto **sin datos**, para a posterio
 
 ### 🛠️ Creación del *scaffold* del módulo
 
-Se empezará creando el *scaffold* de nuestro proyecto mediante los siguientes comandos e instrucciones:
-
 ```dotenv
-Se ejecutará el docker ps para identificar qué contenedores están activos actualmente y así poder entrar a la consola de nuestro contenedor Odoo.
-
-Comando --> docker ps 
-
-Proseguido, cogeremos la ID de nuestro contenedor de Odoo para así poder ejecutar el exec sobre el mismo y entrar en la terminal.
-
-Comando --> docker exec -it <Id de tu contenedor> bash
-
-Dentro ya de la bash, ejecutaremos el comando para así poder crear el scaffold. Este mismo lo que hace es crear las carpetas necesarias para la creación del módulo a posteriori.
-
-Comando --> odoo scaffold modulo_medico_paciente /mnt/extra-addons/
+docker ps
+docker exec -it <Id de tu contenedor Odoo> bash
+odoo scaffold modulo_medico_paciente /mnt/extra-addons/
 ```
 
 ---
@@ -43,8 +33,6 @@ Comando --> odoo scaffold modulo_medico_paciente /mnt/extra-addons/
 ---
 
 ### 🐳 Configuración de `docker-compose.yaml`
-
-Teniendo ya este formato, crearemos nuestro archivo `docker-compose.yaml` para levantar nuestro servicio Odoo:
 
 ```yaml
 services:
@@ -83,7 +71,7 @@ services:
       - "8081:80"
     environment:
       - PGADMIN_DEFAULT_EMAIL=shermidagre@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_DEFAULT_PASSWORD=sxe_password_example
     volumes:
       - dbadmin_data:/var/lib/pgadmin
 
@@ -95,35 +83,31 @@ volumes:
 
 ---
 
-### 📦 Archivo `__manifest__.py` (Manifest)
+### 📦 Archivo `__manifest__.py`
+
+#### Definición del módulo y sus dependencias (*linkear correctamente las views*).
 
 ```python
 # -*- coding: utf-8 -*-
 {
     'name': "modulo_medico_paciente",
-
     'summary': "Gestión de pacientes, médicos y diagnósticos",
-
     'description': """
         Módulo que permite gestionar:
         - Pacientes (nombre, apellidos, síntomas)
-        - Médicos (nombre, apellidos, nº colegiado, consulta asignada)
-        - Relación muchos a muchos mediante diagnósticos (registro de atención)
+        - Médicos (nombre, apellidos, nº colegiado, consulta)
+        - Relación muchos a muchos mediante diagnósticos
     """,
-
     'author': "Samuel Hermida Gregores",
     'website': "https://github.com/shermidagre",
-
     'category': 'Healthcare',
     'version': '1.0',
-
     'depends': ['base'],
-
     'data': [
         'security/ir.model.access.csv',
-        'views/diagnostico_views.xml',
-        'views/medico_views.xml',
         'views/paciente_views.xml',
+        'views/medico_views.xml',
+        'views/diagnostico_views.xml',
         'views/menu_views.xml',
     ],
     'demo': [],
@@ -132,7 +116,9 @@ volumes:
 
 ---
 
-### 📦 Modelo `paciente.py`
+### 📦 Modelo `models/paciente.py`
+
+#### Modulo para gestionar los pacientes y su relación con los médicos a través de diagnósticos.
 
 ```python
 from odoo import models, fields
@@ -155,7 +141,9 @@ class Paciente(models.Model):
 
 ---
 
-### 📦 Modelo `medico.py`
+### 📦 Modelo `models/medico.py`
+
+#### Modulo para gestionar los médicos y su relación con los pacientes a través de diagnósticos.
 
 ```python
 from odoo import models, fields
@@ -169,8 +157,8 @@ class Medico(models.Model):
     apellidos = fields.Char(string="Apellidos", required=True)
     num_colegiado = fields.Char(string="Nº Colegiado", required=True)
     consulta = fields.Char(string="Consulta", required=True)
-    paciente_ids = fields.Many2many('hospital.paciente', compute='_compute_pacientes', string="Pacientes atendidos")
     diagnostico_ids = fields.One2many('hospital.diagnostico', 'medico_id', string="Diagnósticos")
+    paciente_ids = fields.Many2many('hospital.paciente', compute='_compute_pacientes', string="Pacientes atendidos")
 
     def _compute_pacientes(self):
         for medico in self:
@@ -179,7 +167,9 @@ class Medico(models.Model):
 
 ---
 
-### 📦 Modelo `diagnostico.py` (modelo de relación)
+### 📦 Modelo `models/diagnostico.py`
+
+#### Modulo intermedio para la relación muchos a muchos entre el medico y el paciente, para asi poder controlar los diagnosticos de los cuales se encargan los medicos a los pacientes.
 
 ```python
 from odoo import models, fields
@@ -196,34 +186,208 @@ class Diagnostico(models.Model):
 
 ---
 
-### 📦 Archivos de vistas (resumen)
+### 📦 Archivo de permisos: `security/ir.model.access.csv`
 
-- **`diagnostico_views.xml`**: Vista formulario/tree para registrar diagnósticos (medico + paciente).
-- **`medico_views.xml`**: Incluye notebook con pestaña para ver diagnósticos/pacientes atendidos.
-- **`paciente_views.xml`**: Muestra lista de médicos que lo han atendido y detalles del diagnóstico.
-- **`menu_views.xml`**: Menú raíz "Hospital" con submenús para Pacientes, Médicos y Diagnósticos.
+#### Al tener que añadir mas de un modelo, el archivo completo quedaría así:
 
-> *Los archivos XML completos no se incluyen aquí por brevedad, pero siguen la lógica estándar de Odoo con `tree`, `form` y `many2many`/`one2many`.*
+```csv
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hospital_paciente_user,access_hospital_paciente_user,model_hospital_paciente,base.group_user,1,1,1,1
+access_hospital_medico_user,access_hospital_medico_user,model_hospital_medico,base.group_user,1,1,1,1
+access_hospital_diagnostico_user,access_hospital_diagnostico_user,model_hospital_diagnostico,base.group_user,1,1,1,1
+```
+
+---
+
+## 📦 Vistas XML
+
+### Vista de el paciente
+#### `views/paciente_views.xml`
+
+```xml
+<odoo>
+    <record id="view_hospital_paciente_form" model="ir.ui.view">
+        <field name="name">hospital.paciente.form</field>
+        <field name="model">hospital.paciente</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="id_paciente"/>
+                        <field name="nombre"/>
+                        <field name="apellidos"/>
+                        <field name="sintomas" widget="text"/>
+                    </group>
+                    <notebook>
+                        <page string="Médicos que lo han atendido">
+                            <field name="medico_ids" readonly="1">
+                                <tree>
+                                    <field name="nombre"/>
+                                    <field name="apellidos"/>
+                                    <field name="consulta"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hospital_paciente_tree" model="ir.ui.view">
+        <field name="name">hospital.paciente.tree</field>
+        <field name="model">hospital.paciente</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id_paciente"/>
+                <field name="nombre"/>
+                <field name="apellidos"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hospital_paciente" model="ir.actions.act_window">
+        <field name="name">Pacientes</field>
+        <field name="res_model">hospital.paciente</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
+```
+
+---
+
+### Vista de el medico
+
+#### `views/medico_views.xml`
+
+```xml
+<odoo>
+    <record id="view_hospital_medico_form" model="ir.ui.view">
+        <field name="name">hospital.medico.form</field>
+        <field name="model">hospital.medico</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="id_medico"/>
+                        <field name="nombre"/>
+                        <field name="apellidos"/>
+                        <field name="num_colegiado"/>
+                        <field name="consulta"/>
+                    </group>
+                    <notebook>
+                        <page string="Pacientes atendidos">
+                            <field name="paciente_ids" readonly="1">
+                                <tree>
+                                    <field name="nombre"/>
+                                    <field name="apellidos"/>
+                                    <field name="sintomas"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hospital_medico_tree" model="ir.ui.view">
+        <field name="name">hospital.medico.tree</field>
+        <field name="model">hospital.medico</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id_medico"/>
+                <field name="nombre"/>
+                <field name="apellidos"/>
+                <field name="num_colegiado"/>
+                <field name="consulta"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hospital_medico" model="ir.actions.act_window">
+        <field name="name">Médicos</field>
+        <field name="res_model">hospital.medico</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
+```
+
+---
+
+#### `views/diagnostico_views.xml`
+
+```xml
+<odoo>
+    <record id="view_hospital_diagnostico_form" model="ir.ui.view">
+        <field name="name">hospital.diagnostico.form</field>
+        <field name="model">hospital.diagnostico</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="medico_id"/>
+                        <field name="paciente_id"/>
+                        <field name="sintoma" readonly="1"/>
+                        <field name="consulta" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hospital_diagnostico_tree" model="ir.ui.view">
+        <field name="name">hospital.diagnostico.tree</field>
+        <field name="model">hospital.diagnostico</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="medico_id"/>
+                <field name="paciente_id"/>
+                <field name="consulta"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hospital_diagnostico" model="ir.actions.act_window">
+        <field name="name">Diagnósticos</field>
+        <field name="res_model">hospital.diagnostico</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
+```
+
+---
+
+#### `views/menu_views.xml`
+
+```xml
+<odoo>
+    <menuitem id="menu_hospital_root" name="Hospital" sequence="10"/>
+
+    <menuitem id="menu_hospital_pacientes" name="Pacientes" parent="menu_hospital_root" action="action_hospital_paciente"/>
+    <menuitem id="menu_hospital_medicos" name="Médicos" parent="menu_hospital_root" action="action_hospital_medico"/>
+    <menuitem id="menu_hospital_diagnosticos" name="Diagnósticos" parent="menu_hospital_root" action="action_hospital_diagnostico"/>
+</odoo>
+```
 
 ---
 
 ## 🧪 Pruebas: Levantar y probar el módulo
 
-> *Pasos necesarios a seguir si no tienes nada realizado aun*
+*(Sección reutilizada tal cual de tu plantilla original)*
 
 ### Paso 1: Crear base de datos  
 ![img_1.png](ImagenesReadme/img_1.png)
 
 ### Paso 2: PgAdmin  
 - Iniciar sesión  
-- Conectar con la base de datos Odoo  
+- Conectar con Odoo  
 ![img_4.png](ImagenesReadme/img_4.png)  
 ![img_5.png](ImagenesReadme/img_5.png)
 
 ### Paso 3: Buscar y activar el módulo  
 - Iniciar sesión en Odoo  
-- Activar modo desarrollador  
-- Instalar el módulo **modulo_medico_paciente**
+- Instalar **modulo_medico_paciente**
 
 [![Miniatura del video](https://img.youtube.com/vi/p2IjtaCv_sE/0.jpg)](https://youtu.be/p2IjtaCv_sE)
 
@@ -238,60 +402,58 @@ Accede al menú **Hospital** para gestionar pacientes, médicos y diagnósticos.
 ### 📝 Manual de uso
 
 #### 1. Registrar un paciente
-1. Ve a **Hospital → Pacientes → Crear**.
-2. Rellena **ID, nombre, apellidos y síntomas**.
-3. Guarda. No necesita médicos asignados inicialmente.
+- Ve a **Hospital → Pacientes → Crear**
+- Rellena todos los campos
+- Guarda
 
 #### 2. Registrar un médico
-1. Ve a **Hospital → Médicos → Crear**.
-2. Indica **ID, nombre, apellidos, nº colegiado y consulta**.
-3. Guarda.
+- Ve a **Hospital → Médicos → Crear**
+- Completa datos obligatorios
+- Guarda
 
-#### 3. Crear un diagnóstico (vincular paciente y médico)
-1. Ve a **Hospital → Diagnósticos → Crear**.
-2. Selecciona un **médico** y un **paciente**.
-3. Al guardar, se registrará la atención.  
-   → El paciente verá al médico en su ficha.  
-   → El médico verá al paciente en su historial.
+#### 3. Crear un diagnóstico
+- Ve a **Hospital → Diagnósticos → Crear**
+- Selecciona médico y paciente
+- Al guardar, se vinculan automáticamente
 
-> **Nota**: Los campos *Síntomas* y *Consulta* en el diagnóstico se rellenan automáticamente desde los modelos relacionados.
+> ✨ El paciente verá al médico en su ficha. El médico verá al paciente en su historial.
 
 ---
 
 ## 👁️ Guía Visual de Vistas
 
-### Vista del Paciente
-- Muestra: nombre, síntomas, ID.
-- Pestaña: **Médicos que lo han atendido** → lista de médicos (con nombre y consulta).
-
-### Vista del Médico
-- Muestra: nombre, nº colegiado, consulta.
-- Pestaña: **Pacientes atendidos** → lista con nombre y síntomas.
-
-### Vista de Diagnóstico
-- Formulario con selección de médico y paciente.
-- Campos calculados: síntomas del paciente y consulta del médico.
+- **Paciente**: muestra lista de médicos que lo atendieron (nombre + consulta)
+- **Médico**: muestra lista de pacientes (nombre + síntomas)
+- **Diagnóstico**: formulario simple con selección y campos calculados
 
 ---
 
 ## 🛠️ Estructura del Proyecto
 
-- `models/paciente.py`
-- `models/medico.py`
-- `models/diagnostico.py`
-- `views/diagnostico_views.xml`
-- `views/medico_views.xml`
-- `views/paciente_views.xml`
-- `views/menu_views.xml`
-- `security/ir.model.access.csv`
-- `__manifest__.py`
+```
+modulo_medico_paciente/
+├── __manifest__.py
+├── models/
+│   ├── __init__.py
+│   ├── paciente.py
+│   ├── medico.py
+│   └── diagnostico.py
+├── views/
+│   ├── paciente_views.xml
+│   ├── medico_views.xml
+│   ├── diagnostico_views.xml
+│   └── menu_views.xml
+├── security/
+│   └── ir.model.access.csv
+└── README.md
+```
 
 ---
 
 ## 🔗 Enlaces Útiles (v18)
 
-- 📚 **Documentación oficial DockerHub**: [https://hub.docker.com/_/odoo](https://hub.docker.com/_/odoo)
-- 📚 **Documentación oficial Odoo**: [https://www.odoo.com/documentation/18.0](https://www.odoo.com/documentation/18.0)
+- 📚 **Docker Odoo**: [https://hub.docker.com/_/odoo](https://hub.docker.com/_/odoo)
+- 📚 **Documentación Odoo**: [https://www.odoo.com/documentation/18.0](https://www.odoo.com/documentation/18.0)
 
 ---
 
@@ -302,10 +464,10 @@ Accede al menú **Hospital** para gestionar pacientes, médicos y diagnósticos.
 
 🛠️ **Adjunta**:
 - Captura del error
-- Versión de Odoo y Docker usada
+- Comandos ejecutados
 
 ---
 
-> ✨ ¡Y listo! Tu módulo de gestión hospitalaria debería estar funcionando correctamente dentro de tu instancia de Odoo Community v18.0.
+> ✨ ¡Y listo! Tu módulo hospitalario está listo para usarse en Odoo Community v18.0.
 
 ---
