@@ -31,7 +31,7 @@ Comando --> docker exec -it <Id de tu contenedor> bash
 
 Dentro ya de la bash, ejecutaremos el comando para así poder crear el scaffold. Este mismo lo que hace es crear las carpetas necesarias para la creación del módulo a posteriori.
 
-Comando --> odoo scaffold <Nombre que le vayas a dar a tu proyecto> /mnt/extra-addons/
+Comando --> odoo scaffold modulo_medico_paciente /mnt/extra-addons/
 ```
 
 ---
@@ -83,7 +83,7 @@ services:
       - "8081:80"
     environment:
       - PGADMIN_DEFAULT_EMAIL=shermidagre@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=sxe_password_example
+      - PGADMIN_DEFAULT_PASSWORD=admin
     volumes:
       - dbadmin_data:/var/lib/pgadmin
 
@@ -97,289 +97,196 @@ volumes:
 
 ### 📦 Archivo `__manifest__.py` (Manifest)
 
-Especificaremos las características del módulo que queremos crear en Odoo en el archivo **Manifest**.
-
-> Aquí irán las especificaciones básicas, pero se pueden incluir más campos si es necesario.
-
-```env
+```python
 # -*- coding: utf-8 -*-
 {
-    'name': "second_proyect_sxe",
+    'name': "modulo_medico_paciente",
 
-    'summary': "Modulo que permite ver el signo del horoscopo chino ",
+    'summary': "Gestión de pacientes, médicos y diagnósticos",
 
     'description': """
-        Este modulo extiende el modelo res_parter añadiendo los siguientes 3 campos a contactos:
-         Fecha de nacimiento
-         Edad (Calculada automaticamente)
-         Signo del horoscopo chino (calculado automaticamente)
+        Módulo que permite gestionar:
+        - Pacientes (nombre, apellidos, síntomas)
+        - Médicos (nombre, apellidos, nº colegiado, consulta asignada)
+        - Relación muchos a muchos mediante diagnósticos (registro de atención)
     """,
 
-    'author': "Alumno esclavista",
-    'website': "https://www.noleolosuficientecomoparaquejarme.com",
+    'author': "Samuel Hermida Gregores",
+    'website': "https://github.com/shermidagre",
 
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
+    'category': 'Healthcare',
+    'version': '1.0',
 
-    # any module necessary for this one to work correctly
-    'depends': ['base','contacts'],
+    'depends': ['base'],
 
-    # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        'security/ir.model.access.csv',
+        'views/diagnostico_views.xml',
+        'views/medico_views.xml',
+        'views/paciente_views.xml',
+        'views/menu_views.xml',
     ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
+    'demo': [],
 }
 ```
-### 📦 Archivo `models.py` (Models)
 
-```env
+---
 
-# -*- coding: utf-8 -*-
+### 📦 Modelo `paciente.py`
 
-from odoo import models, fields, api
-from datetime import date
+```python
+from odoo import models, fields
 
-class second_proyect_sxe(models.Model):
-    _inherit = 'res.partner'
+class Paciente(models.Model):
+    _name = 'hospital.paciente'
+    _description = 'Paciente'
 
-    f_nac = fields.Date("Fecha de nacimiento")
+    id_paciente = fields.Char(string="ID Paciente", required=True)
+    nombre = fields.Char(string="Nombre", required=True)
+    apellidos = fields.Char(string="Apellidos", required=True)
+    sintomas = fields.Text(string="Síntomas")
+    diagnostico_ids = fields.One2many('hospital.diagnostico', 'paciente_id', string="Diagnósticos")
+    medico_ids = fields.Many2many('hospital.medico', compute='_compute_medicos', string="Médicos que lo han atendido")
 
-    edad = fields.Integer(string="Edad", readonly=True, compute="_calcular_edad_china", store=True)
-    signo_chino = fields.Char(string="Signo Chino", readonly=True, compute="_calcular_chinada", store=True)
-
-    codigo_socio = fields.Char(string="Código de Socio")
-
-    nivel_fidelidad = fields.Selection(
-        [
-            ('estandar', 'Estándar'),
-            ('premium', 'Premium'),
-            ('gold', 'Gold')
-        ],
-        string="Nivel de Fidelidad",
-        compute="_compute_nivel_fidelidad",
-        store=True,
-        default='estandar'
-    )
-
-    @api.depends('f_nac')
-    def _calcular_edad_china(self):
-        for record in self:
-            if record.f_nac:
-                today = date.today()
-                # Fórmula precisa para edad teniendo en cuenta si ya cumplió años o no
-                age = today.year - record.f_nac.year - ((today.month, today.day) < (record.f_nac.month, record.f_nac.day))
-                record.edad = age
-            else:
-                record.edad = 0
-
-    @api.depends('f_nac')
-    def _calcular_chinada(self):
-        # Lista ordenada según el resto de dividir año / 12
-        zodiacos = ['Mono', 'Gallo', 'Perro', 'Cerdo', 'Rata', 'Buey', 'Tigre', 'Conejo', 'Dragón', 'Serpiente', 'Caballo', 'Cabra']
-        for record in self:
-            if record.f_nac:
-                indice = record.f_nac.year % 12
-                record.signo_chino = zodiacos[indice]
-            else:
-                record.signo_chino = "Desconocido"
-
-    @api.depends('codigo_socio')
-    def _compute_nivel_fidelidad(self):
-        for record in self:
-            if not record.codigo_socio:
-                record.nivel_fidelidad = 'estandar'
-            elif record.codigo_socio.upper().startswith('G'):
-                record.nivel_fidelidad = 'gold'
-            else:
-                record.nivel_fidelidad = 'premium'
-
+    def _compute_medicos(self):
+        for paciente in self:
+            paciente.medico_ids = paciente.diagnostico_ids.mapped('medico_id')
 ```
 
-### 📦 Archivo `views.xml` (views)
+---
 
-```env
-<odoo>
-    <data>
+### 📦 Modelo `medico.py`
 
-        <record id="view_partner_form_sxe_extensions" model="ir.ui.view">
-            <field name="name">res.partner.form.sxe.extensions</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//notebook" position="inside">
-                    <page string="Signo Chino">
-                        <group>
-                            <field name="f_nac"/>
-                            <field name="edad"/>
-                            <field name="signo_chino"/>
-                        </group>
-                    </page>
-                    <page string="Membresía">
-                        <group>
-                            <field name="codigo_socio" placeholder="Ej: G-1234"/>
-                            <field name="nivel_fidelidad"/>
-                        </group>
-                    </page>
-                </xpath>
-            </field>
-        </record>
+```python
+from odoo import models, fields
 
-        <record id="view_partner_tree_sxe_extensions" model="ir.ui.view">
-            <field name="name">res.partner.tree.sxe.extensions</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_tree"/>
-            <field name="arch" type="xml">
-                <field name="complete_name" position="after">
-                    <field name="signo_chino" optional="show"/>
-                    <field name="nivel_fidelidad"
-                           widget="badge"
-                           decoration-info="nivel_fidelidad in ('premium', 'gold')"
-                           decoration-muted="nivel_fidelidad == 'estandar'"/>
-                </field>
-            </field>
-        </record>
+class Medico(models.Model):
+    _name = 'hospital.medico'
+    _description = 'Médico'
 
-        <record id="view_partner_kanban_sxe_extensions" model="ir.ui.view">
-            <field name="name">res.partner.kanban.sxe.extensions</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='display_name']" position="after">
+    id_medico = fields.Char(string="ID Médico", required=True)
+    nombre = fields.Char(string="Nombre", required=True)
+    apellidos = fields.Char(string="Apellidos", required=True)
+    num_colegiado = fields.Char(string="Nº Colegiado", required=True)
+    consulta = fields.Char(string="Consulta", required=True)
+    paciente_ids = fields.Many2many('hospital.paciente', compute='_compute_pacientes', string="Pacientes atendidos")
+    diagnostico_ids = fields.One2many('hospital.diagnostico', 'medico_id', string="Diagnósticos")
 
-                    <div t-if="record.signo_chino.raw_value">
-                        <span class="text-muted">Horóscopo: </span>
-                        <field name="signo_chino"/>
-                    </div>
-
-                    <div t-if="record.codigo_socio.raw_value">
-                        <span class="text-muted">Socio: </span>
-                        <strong><field name="codigo_socio"/></strong>
-                    </div>
-
-                </xpath>
-            </field>
-        </record>
-
-    </data>
-</odoo>
+    def _compute_pacientes(self):
+        for medico in self:
+            medico.paciente_ids = medico.diagnostico_ids.mapped('paciente_id')
 ```
+
+---
+
+### 📦 Modelo `diagnostico.py` (modelo de relación)
+
+```python
+from odoo import models, fields
+
+class Diagnostico(models.Model):
+    _name = 'hospital.diagnostico'
+    _description = 'Diagnóstico'
+
+    medico_id = fields.Many2one('hospital.medico', string="Médico", required=True)
+    paciente_id = fields.Many2one('hospital.paciente', string="Paciente", required=True)
+    sintoma = fields.Text(related='paciente_id.sintomas', string="Síntomas", readonly=True)
+    consulta = fields.Char(related='medico_id.consulta', string="Consulta", readonly=True)
+```
+
+---
+
+### 📦 Archivos de vistas (resumen)
+
+- **`diagnostico_views.xml`**: Vista formulario/tree para registrar diagnósticos (medico + paciente).
+- **`medico_views.xml`**: Incluye notebook con pestaña para ver diagnósticos/pacientes atendidos.
+- **`paciente_views.xml`**: Muestra lista de médicos que lo han atendido y detalles del diagnóstico.
+- **`menu_views.xml`**: Menú raíz "Hospital" con submenús para Pacientes, Médicos y Diagnósticos.
+
+> *Los archivos XML completos no se incluyen aquí por brevedad, pero siguen la lógica estándar de Odoo con `tree`, `form` y `many2many`/`one2many`.*
 
 ---
 
 ## 🧪 Pruebas: Levantar y probar el módulo
 
-### Paso 1: Crear base de datos
+> *Pasos necesarios a seguir si no tienes nada realizado aun*
 
+### Paso 1: Crear base de datos  
 ![img_1.png](ImagenesReadme/img_1.png)
 
----
-
-### Paso 2: PgAdmin
-
-#### Iniciamos sesion
-
-![img_4.png](ImagenesReadme/img_4.png)
-
-#### Conectamos nuestro odoo
-
+### Paso 2: PgAdmin  
+- Iniciar sesión  
+- Conectar con la base de datos Odoo  
+![img_4.png](ImagenesReadme/img_4.png)  
 ![img_5.png](ImagenesReadme/img_5.png)
 
----
-
-![img.png](ImagenesReadme/453.png)
-
-
-### Paso 3: Buscar y activar el módulo
-
-#### 🔐 Iniciar sesión
-
-![img_2.png](ImagenesReadme/img_2.png)
-
-#### Activamos la app contactos para a posterior
-
-![img_6.png](ImagenesReadme/img_6.png)
-
-#### 📥 Instalar el módulo y comprobar res_parter
+### Paso 3: Buscar y activar el módulo  
+- Iniciar sesión en Odoo  
+- Activar modo desarrollador  
+- Instalar el módulo **modulo_medico_paciente**
 
 [![Miniatura del video](https://img.youtube.com/vi/p2IjtaCv_sE/0.jpg)](https://youtu.be/p2IjtaCv_sE)
 
 > 💡 Haz clic en la imagen para abrir el tutorial en YouTube.
 
----
-
 ### 🎉 ¡Módulo instalado!
 
-> Tan pronto se realiza la instalación debe entrar a contactos y a partir de ahi ir probando cosillas.
+Accede al menú **Hospital** para gestionar pacientes, médicos y diagnósticos.
 
 ---
 
 ### 📝 Manual de uso
 
-####  ¿Qué haremos después de instalar nuestro módulo?
+#### 1. Registrar un paciente
+1. Ve a **Hospital → Pacientes → Crear**.
+2. Rellena **ID, nombre, apellidos y síntomas**.
+3. Guarda. No necesita médicos asignados inicialmente.
 
-#### 1\. Gestión de Datos Demográficos (Zodiaco)
+#### 2. Registrar un médico
+1. Ve a **Hospital → Médicos → Crear**.
+2. Indica **ID, nombre, apellidos, nº colegiado y consulta**.
+3. Guarda.
 
-Para calcular la edad y el signo chino de un contacto:
+#### 3. Crear un diagnóstico (vincular paciente y médico)
+1. Ve a **Hospital → Diagnósticos → Crear**.
+2. Selecciona un **médico** y un **paciente**.
+3. Al guardar, se registrará la atención.  
+   → El paciente verá al médico en su ficha.  
+   → El médico verá al paciente en su historial.
 
-1.  Navega a la aplicación **Contactos**.
-2.  Abre un contacto existente o crea uno nuevo.
-3.  Busca la pestaña **"Signo Chino"** dentro del formulario.
-4.  Establece la **Fecha de nacimiento**.
-5.  **Resultado:** Los campos *Edad* y *Signo del horóscopo chino* se calcularán automáticamente al guardar o cambiar la fecha.
+> **Nota**: Los campos *Síntomas* y *Consulta* en el diagnóstico se rellenan automáticamente desde los modelos relacionados.
 
-> **Nota:** Si la fecha se deja vacía, la edad será 0 y el signo aparecerá como "Desconocido".
-
-### 2\. Gestión de Fidelización (Membresía)
-
-El nivel de fidelidad se asigna automáticamente según el código introducido:
-
-1.  Dentro del contacto, ve a la pestaña **"Membresía"**.
-2.  Introduce un valor en el campo **Código de Socio**:
-    * **Caso A (Nivel Estándar):** Deja el campo vacío.
-    * **Caso B (Nivel Premium):** Escribe cualquier código (ej: `VIP-100`, `SOCIO-555`).
-    * **Caso C (Nivel Gold):** Escribe un código que empiece por **"G"** (mayúscula o minúscula). Ej: `G-2025`, `gold-user`.
-3.  El campo **Nivel de Fidelidad** cambiará automáticamente (es de solo lectura).
-
------
+---
 
 ## 👁️ Guía Visual de Vistas
 
-El módulo modifica las vistas principales para facilitar la identificación rápida de los socios VIP.
+### Vista del Paciente
+- Muestra: nombre, síntomas, ID.
+- Pestaña: **Médicos que lo han atendido** → lista de médicos (con nombre y consulta).
 
-### Vista de Lista (Tree)
+### Vista del Médico
+- Muestra: nombre, nº colegiado, consulta.
+- Pestaña: **Pacientes atendidos** → lista con nombre y síntomas.
 
-En el listado general de contactos, verás dos nuevas columnas al final:
+### Vista de Diagnóstico
+- Formulario con selección de médico y paciente.
+- Campos calculados: síntomas del paciente y consulta del médico.
 
-* **Signo Chino:** (Opcional, puede ocultarse).
-* **Nivel de Fidelidad:** Se muestra como una etiqueta (**Badge**).
-    * Si es *Premium* o *Gold*, la etiqueta aparecerá resaltada en color **Azul Claro**.
-    * Si es *Estándar*, aparecerá en color gris.
-
-### Vista Kanban (Tarjetas)
-
-En la vista de tarjetas, se ha añadido información extra debajo del nombre del contacto:
-
-1.  **Horóscopo:** Muestra el animal del zodiaco (si tiene fecha de nacimiento).
-2.  **Socio:** Muestra el Código de Socio en **Negrita** para destacar a los miembros del club.
-
------
+---
 
 ## 🛠️ Estructura del Proyecto
 
-* `models/models.py`: Contiene la lógica Python (`_calcular_edad_china`, `_compute_nivel_fidelidad`).
-* `views/views.xml`: Define las pestañas nuevas en el Formulario, las columnas en el Tree y los campos en el Kanban.
-* `__manifest__.py`: Archivo de configuración y dependencias del módulo.
+- `models/paciente.py`
+- `models/medico.py`
+- `models/diagnostico.py`
+- `views/diagnostico_views.xml`
+- `views/medico_views.xml`
+- `views/paciente_views.xml`
+- `views/menu_views.xml`
+- `security/ir.model.access.csv`
+- `__manifest__.py`
 
------
+---
 
 ## 🔗 Enlaces Útiles (v18)
 
@@ -395,9 +302,10 @@ En la vista de tarjetas, se ha añadido información extra debajo del nombre del
 
 🛠️ **Adjunta**:
 - Captura del error
+- Versión de Odoo y Docker usada
 
 ---
 
-> ✨ ¡Y listo! Tu módulo debería estar funcionando correctamente dentro de tu instancia de Odoo Community v18.0.
+> ✨ ¡Y listo! Tu módulo de gestión hospitalaria debería estar funcionando correctamente dentro de tu instancia de Odoo Community v18.0.
 
 ---
